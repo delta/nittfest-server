@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+    db:
+      container_name: postgresql_db
+      image: postgres:14
+      restart: unless-stopped
+      env_file:
+        - .env
+      volumes:
+        - ./pgdata/db:/var/lib/postgresql/data
+
+    app:
+      container_name: server
+      image: server
+      build:
+        context: ./docker
+        dockerfile: Dockerfile.dev
+      restart: unless-stopped
+      env_file:
+        - .env
+      ports:
+        - ${SERVER_EXTERNAL_PORT}:8000
+      depends_on:
+        - db

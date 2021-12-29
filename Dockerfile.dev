@@ -1,0 +1,21 @@
+FROM python:3.9.0-slim
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    nano \
+    vim \
+    curl \
+    netcat \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install pipenv
+
+WORKDIR /app
+
+COPY Pipfile Pipfile.lock ./
+
+RUN pipenv install --system --dev
+
+COPY . .
+
+CMD [ "/app/docker/scripts/entrypoint-dev.sh" ]

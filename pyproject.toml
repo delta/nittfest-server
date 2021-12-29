@@ -1,0 +1,20 @@
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-v"
+testpaths = [
+    "tests"
+]
+norecursedirs = [
+    ".venv"
+]
+
+[tool.pylint.'MESSAGES CONTROL']
+extension-pkg-whitelist = "pydantic"
+
+[tool.black]
+line-length = 75
+exclude = '''
+/(
+  | versions
+)/
+'''

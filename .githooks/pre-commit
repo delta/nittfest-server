@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "Run Formatter..."
+pipenv run black server/ tests/
+
+echo "Run Analyzer..."
+pipenv run pylint --fail-under=10 server/ tests/
