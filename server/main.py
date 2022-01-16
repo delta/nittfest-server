@@ -2,11 +2,13 @@
 Main File
 """
 
-
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from .routers import auth
+
 
 # from sqlalchemy.orm import Session
-from server.config.logger import logger
+
 
 # from .controllers import user_controller as controller
 # from .schemas.user_schema import User, UserCreate
@@ -14,8 +16,20 @@ from server.config.logger import logger
 
 # Base.metadata.create_all(bind=engine)
 
-
 app = FastAPI()
+app.include_router(auth.router)
+
+origins = [
+    "http://localhost:41633",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/status")
@@ -23,11 +37,11 @@ def status():
     """
     get route for status
     """
-    logger.debug("FFFFdd")
-    logger.info("FFFFddas")
     return {"status": "ok"}
 
 
+# @app.post("/api/oauth/token")
+# async def tokenResponse(response: Res)
 # Dependency
 # def get_db():
 #     db = SessionLocal()

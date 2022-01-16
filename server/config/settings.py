@@ -17,7 +17,11 @@ class Settings(BaseSettings):
     mysql_user: str = os.getenv("MYSQL_USER")
     mysql_password: str = os.getenv("MYSQL_PASSWORD")
     mysql_host: str = os.getenv("MYSQL_HOST")
-    mysql_db: str = os.getenv("MYSQL_DATABSE")
+    mysql_db: str = os.getenv("MYSQL_DATABASE")
+    client_id: str = os.getenv("CLIENT_ID")
+    client_secret: str = os.getenv("CLIENT_SECRET")
+    jwt_secret: str = os.getenv("JWT_SECRET")
+    jwt_algo: str = os.getenv("JWT_ALGORITHM")
     sqlalchemy_database_url: str = (
         f"mysql+pymysql://{mysql_user}:"
         f"{mysql_password}@{mysql_host}/{mysql_db}"

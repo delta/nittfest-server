@@ -2,6 +2,6 @@
 Schemas for the API.
 """
 
-from server.schemas.users import User
+from server.schemas.users import Users
 
-models = [User]
+models = [Users]
