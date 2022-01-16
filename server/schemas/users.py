@@ -1,5 +1,5 @@
 """
-User Schema
+Users Schema
 """
 
 from sqlalchemy import Column, Integer, String
@@ -7,26 +7,33 @@ from sqlalchemy import Column, Integer, String
 from server.config.database import Base
 
 
-class User(Base):
-    """User Models"""
+class Users(Base):
+    """Users Models"""
 
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
-    username = Column(String(50))
-    emailid = Column(String(50), unique=True)
+    name = Column(String(255))
+    email = Column(String(255))
+    mobile_number = Column(String(255))
+    gender = Column(String(255))
 
-    def __init__(self, username, emailid):
-        self.username = username
-        self.emailid = emailid
+    def __init__(self, name, email, mobile_number, gender):
+        self.name = name
+        self.email = email
+        self.mobile_number = mobile_number
+        self.gender = gender
 
     def __repr__(self):
         """Representation of the object"""
-        return "<User '{self.username}'>"
+        return """<Name: '{self.name}', Email: '{self.email}',
+        Mobile: '{self.mobile_number}', Gender: '{self.gender}' >"""
 
     def serialize(self):
         """Return object data in easily serializeable format"""
         return {
             "id": self.id,
-            "username": self.username,
-            "emailid": self.emailid,
+            "name": self.name,
+            "email": self.email,
+            "mobile": self.mobile_number,
+            "gender": self.gender,
         }
