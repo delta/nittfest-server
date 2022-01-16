@@ -25,6 +25,7 @@ PyMySQL = "==1.0.2"
 cryptography = "==36.0.1"
 requests = "==2.26.0"
 pyjwt = "*"
+pydantic = "==1.9.0"
 
 [requires]
 python_version = "3.9"
