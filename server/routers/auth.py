@@ -7,9 +7,9 @@ import requests
 import jwt as JWT
 from fastapi import APIRouter, HTTPException, status
 from server.config.settings import settings
-from ..schemas.users import Users
+from server.schemas.users import Users
 
-from ..config.database import SessionLocal
+from server.config.database import SessionLocal
 
 
 router = APIRouter(
@@ -65,12 +65,13 @@ async def fetch_user_details(
 
     client_id = settings.client_id
     client_secret = settings.client_secret
+    redirect_url = settings.redirect_url
     params = {
         "client_id": client_id,
         "client_secret": client_secret,
         "grant_type": "authorization_code",
         "code": auth_code,
-        "redirect_uri": "http://localhost:41633/static.html",
+        "redirect_uri": redirect_url,
     }
     token_response = requests.post(
         url="https://auth.delta.nitt.edu/api/oauth/token", data=params

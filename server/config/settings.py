@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     mysql_db: str = os.getenv("MYSQL_DATABASE")
     client_id: str = os.getenv("CLIENT_ID")
     client_secret: str = os.getenv("CLIENT_SECRET")
+    redirect_url: str = os.getenv("REDIRECT_URL")
+    frontend_url: str = os.getenv("FRONTEND_URL")
     jwt_secret: str = os.getenv("JWT_SECRET")
     jwt_algo: str = os.getenv("JWT_ALGORITHM")
     sqlalchemy_database_url: str = (
