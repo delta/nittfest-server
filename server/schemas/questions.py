@@ -2,7 +2,7 @@
 Questions Schema
 """
 
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.types import PickleType
 
 from server.config.database import Base
@@ -26,7 +26,7 @@ class Questions(Base):
 
     def __repr__(self):
         """Representation of the object"""
-        return "<Question '{self.question}'>"
+        return f"<Question '{self.question}'>"
 
     def serialize(self):
         """Return object data in easily serializeable format"""
@@ -36,4 +36,32 @@ class Questions(Base):
             "is_subjective": self.is_subjective,
             "options": self.options,
             "domain": self.domain,
+        }
+
+
+class Answer(Base):
+    """Answer Schema"""
+
+    __tablename__ = "answers"
+    id = Column(Integer, primary_key=True)
+    answer = Column(String(2000))
+    question_id = Column(Integer, ForeignKey("questions.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
+
+    def __init__(self, answer, question_id, user_id):
+        self.answer = answer
+        self.question_id = question_id
+        self.user_id = user_id
+
+    def __repr__(self):
+        """Representation of the object"""
+        return f"<Answer '{self.answer}'>"
+
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            "id": self.id,
+            "answer": self.answer,
+            "question_id": self.question_id,
+            "user_id": self.user_id,
         }

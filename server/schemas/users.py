@@ -25,7 +25,7 @@ class Users(Base):
 
     def __repr__(self):
         """Representation of the object"""
-        return """<Name: '{self.name}', Email: '{self.email}',
+        return f"""<Name: '{self.name}', Email: '{self.email}',
         Mobile: '{self.mobile_number}', Gender: '{self.gender}' >"""
 
     def serialize(self):
