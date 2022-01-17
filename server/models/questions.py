@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from pydantic.fields import Field
 
 
-class DomainModel(BaseModel):
+class QuestionRequestModel(BaseModel):
     """
     Request model for domain
     """
@@ -18,11 +18,35 @@ class DomainModel(BaseModel):
     )
 
 
-class DomainResponseModel(BaseModel):
+class QuestionResponseModel(BaseModel):
     """
     Response model for domain
     """
 
     questions: list = Field(
         ..., title="Questions", description="List of questions"
+    )
+
+
+class AnswerRequestModel(BaseModel):
+    """
+    Request model for answer
+    """
+
+    answers: list = Field(
+        ...,
+        title="Answer",
+        description="Answer for the question",
+    )
+
+
+class AnswerResponseModel(BaseModel):
+    """
+    Response model for answer
+    """
+
+    message: str = Field(
+        ...,
+        title="Answer",
+        description="Response model Answer for the question",
     )
