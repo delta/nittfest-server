@@ -46,15 +46,21 @@ async def fetch_user_details(
             url="https://auth.delta.nitt.edu/api/resources/user",
             headers=headers,
         ).json()
-        new_user = Users(
-            userdetails["name"],
-            userdetails["email"],
-            userdetails["phoneNumber"],
-            userdetails["gender"],
-        )
         session = SessionLocal()
-        session.add(new_user)
-        session.commit()
+        if (
+            not session.query(Users)
+            .filter_by(email=userdetails["email"])
+            .first()
+        ):
+            new_user = Users(
+                userdetails["name"],
+                userdetails["email"],
+                userdetails["phoneNumber"],
+                userdetails["gender"],
+            )
+            session.add(new_user)
+            session.commit()
+        session.close()
         jwt = sign_jwt(userdetails["email"], userdetails["name"])
         logger.info(f'{userdetails["name"]} user logged in')
         return {
