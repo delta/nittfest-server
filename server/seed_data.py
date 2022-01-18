@@ -177,6 +177,24 @@ async def seed():
                     "is_subjective": False,
                     "domain": "AMBIENCE",
                 },
+                {
+                    "question": "Which teams are you currently a part of?",
+                    "options": [],
+                    "is_subjective": True,
+                    "domain": "DESIGN",
+                },
+                {
+                    "question": "Why do you want to be a part of NITTFEST design team?",
+                    "options": [],
+                    "is_subjective": True,
+                    "domain": "DESIGN",
+                },
+                {
+                    "question": "Which design softwares are you familiar with?",
+                    "options": [],
+                    "is_subjective": True,
+                    "domain": "DESIGN",
+                },
             ]
             logger.info(database)
             for quest in data:

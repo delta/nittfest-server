@@ -11,6 +11,7 @@ from server.models.questions import (
 from server.models.errors import GenericError
 from server.config.database import SessionLocal
 from server.schemas.questions import Questions, Answer
+from server.schemas.preferences import Preferences
 from server.schemas.users import Users
 from server.controllers.auth import JWTBearer, decode_jwt
 from server.config.logger import logger
@@ -27,7 +28,7 @@ router = APIRouter(
 )
 async def form_questions(
     domain: QuestionRequestModel,
-    token: str = Depends(decode_jwt),
+    token: str = Depends(JWTBearer()),
 ) -> QuestionResponseModel:
     """
     POST route for form questions
@@ -62,25 +63,29 @@ async def form_questions(
             questions = database.query(Questions).all()
         else:
             questions = []
-        database.close()
+
         logger.info(f"{domain.domain} form questions retrieved")
         email = decode_jwt(token)["user_email"]
         user = database.query(Users).filter_by(email=email).first()
+        response_questions = []
         for question in questions:
+            question = question.serialize()
             if (
                 database.query(Answer)
-                .filter_by(user_id=user.id, question_id=question.id)
+                .filter_by(user_id=user.id, question_id=question["id"])
                 .first()
             ):
                 question["answer"] = (
                     database.query(Answer)
-                    .filter_by(user_id=user.id, question_id=question.id)
+                    .filter_by(user_id=user.id, question_id=question["id"])
                     .first()
                     .answer
                 )
             else:
                 question["answer"] = ""
-        return {"questions": questions}
+            response_questions.append(question)
+        database.close()
+        return {"questions": response_questions}
     except Exception as exception:
         logger.error(
             f"{domain.domain} form questions retrieval failed due to {exception}"
@@ -132,6 +137,24 @@ async def form_questions_submit(
                 database.query(Answer).filter_by(
                     user_id=user.id, question_id=answer["question_id"]
                 ).update({"answer": answer["answer"]})
+
+        if not (
+            database.query(Preferences)
+            .filter_by(
+                user_id=user.id, preference_no=answers.preference_no
+            )
+            .first()
+        ):
+
+            database.add(
+                Preferences(
+                    user_id=user.id,
+                    preference_no=answers.preference_no,
+                    domain=answers.domain,
+                )
+            )
+        else:
+            raise GenericError("Preferences already filled")
 
         database.commit()
         database.close()
