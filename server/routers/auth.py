@@ -39,6 +39,7 @@ async def fetch_user_details(
         token_response = requests.post(
             url="https://auth.delta.nitt.edu/api/oauth/token", data=params
         ).json()
+        logger.debug(token_response)
         headers = {
             "Authorization": "Bearer " + token_response["access_token"]
         }
@@ -71,7 +72,7 @@ async def fetch_user_details(
             "jwt": jwt["jwt_token"],
         }
     except Exception as exception:
-        logger.error("/dauth failed with {exception}")
+        logger.error(f"/dauth failed with {exception}")
         raise HTTPException(
             status_code=500,
             detail="An unexpected error occurred while authentication",

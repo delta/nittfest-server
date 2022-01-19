@@ -30,12 +30,13 @@ async def check_preferences(
     """
     GET route for preferences
     """
-    logger.debug("Checking preferences")
     database = SessionLocal()
     _email = decode_jwt(token)["user_email"]
     _user = database.query(Users).filter_by(email=_email).first()
 
-    return database.query(Preferences).filter_by(user_id=_user.id).exists()
+    return bool(
+        database.query(Preferences).filter_by(user_id=_user.id).count()
+    )
 
 
 @router.post(
@@ -56,6 +57,34 @@ async def post_preferences(
         if not user:
             database.close()
             raise GenericError("User Not found")
+
+        if (
+            database.query(Preferences)
+            .filter_by(user_id=user.id, preference_no=1)
+            .count()
+        ):
+            database.query(Preferences).filter_by(
+                user_id=user.id, preference_no=1
+            ).delete()
+
+        if (
+            database.query(Preferences)
+            .filter_by(user_id=user.id, preference_no=2)
+            .count()
+        ):
+            database.query(Preferences).filter_by(
+                user_id=user.id, preference_no=2
+            ).delete()
+
+        if (
+            database.query(Preferences)
+            .filter_by(user_id=user.id, preference_no=3)
+            .count()
+        ):
+            database.query(Preferences).filter_by(
+                user_id=user.id, preference_no=3
+            ).delete()
+
         new_preference_1 = Preferences(
             user.id, 1, preferences.preference_1
         )
