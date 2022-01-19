@@ -195,6 +195,58 @@ async def seed():
                     "is_subjective": True,
                     "domain": "DESIGN",
                 },
+                {
+                    "question": "What made you choose NITTFEST Events as one of your preferences?",
+                    "options": [],
+                    "is_subjective": True,
+                    "domain": "EVENTS",
+                },
+                {
+                    "question": "State an instance wherein you thought on your feet"
+                    + " and made quick decisions.",
+                    "options": [],
+                    "is_subjective": True,
+                    "domain": "EVENTS",
+                },
+                {
+                    "question": "From the previous editions of NITTFEST, choose one "
+                    + "cluster and explain one or two events under it. ",
+                    "options": [],
+                    "is_subjective": True,
+                    "domain": "EVENTS",
+                },
+                {
+                    "question": "Assume you're in charge of an event taking place"
+                    + " on the CEESAT ground. "
+                    + "A bull enters the ring in the middle of the event. What will you do? ",
+                    "options": [],
+                    "is_subjective": True,
+                    "domain": "EVENTS",
+                },
+                {
+                    "question": "A time machine is given to you. You may only use "
+                    + "it for silly purposes. "
+                    + "What would be the craziest thing you could do with it?",
+                    "options": [],
+                    "is_subjective": True,
+                    "domain": "EVENTS",
+                },
+                {
+                    "question": "You accidently ate the sun for breakfast,"
+                    + "and now the entire world is blaming you,"
+                    + " including the plants, for depriving the globe of its only"
+                    + " source of energy, and labelling you a traitor."
+                    + " How would you calm the sudden fury and compensate for the sun's absence?",
+                    "options": [],
+                    "is_subjective": True,
+                    "domain": "EVENTS",
+                },
+                {
+                    "question": "Why should we induct you into the team?",
+                    "options": [],
+                    "is_subjective": True,
+                    "domain": "EVENTS",
+                },
             ]
             logger.info(database)
             for quest in data:
