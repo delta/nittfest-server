@@ -27,17 +27,18 @@ router = APIRouter(
 )
 async def form_questions(
     domain: QuestionRequestModel,
+    token: str = Depends(JWTBearer()),
 ) -> QuestionResponseModel:
     """
     POST route for form questions
     """
     try:
         database = SessionLocal()
-        if domain.domain == "PRC":
+        if domain.domain == "PR&C":
             questions = (
                 database.query(Questions).filter_by(domain="PRC").all()
             )
-        elif domain.domain == "NOC":
+        elif domain.domain == "OC":
             questions = (
                 database.query(Questions).filter_by(domain="NOC").all()
             )
@@ -47,13 +48,43 @@ async def form_questions(
                 .filter_by(domain="MARKETING")
                 .all()
             )
+        elif domain.domain == "AMBIENCE":
+            questions = (
+                database.query(Questions)
+                .filter_by(domain="AMBIENCE")
+                .all()
+            )
+        elif domain.domain == "EVENTS":
+            questions = (
+                database.query(Questions).filter_by(domain="EVENTS").all()
+            )
         elif domain.domain == "ALL":
             questions = database.query(Questions).all()
         else:
             questions = []
-        database.close()
+
         logger.info(f"{domain.domain} form questions retrieved")
-        return {"questions": questions}
+        email = decode_jwt(token)["user_email"]
+        user = database.query(Users).filter_by(email=email).first()
+        response_questions = []
+        for question in questions:
+            question = question.serialize()
+            if (
+                database.query(Answer)
+                .filter_by(user_id=user.id, question_id=question["id"])
+                .first()
+            ):
+                question["answer"] = (
+                    database.query(Answer)
+                    .filter_by(user_id=user.id, question_id=question["id"])
+                    .first()
+                    .answer
+                )
+            else:
+                question["answer"] = ""
+            response_questions.append(question)
+        database.close()
+        return {"questions": response_questions}
     except Exception as exception:
         logger.error(
             f"{domain.domain} form questions retrieval failed due to {exception}"
