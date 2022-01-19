@@ -26,7 +26,7 @@ router = APIRouter(
 )
 async def check_preferences(
     token: str = Depends(JWTBearer()),
-):
+) -> PreferenceResponseModel:
     """
     GET route for preferences
     """
@@ -35,7 +35,11 @@ async def check_preferences(
     _email = decode_jwt(token)["user_email"]
     _user = database.query(Users).filter_by(email=_email).first()
 
-    return database.query(Preferences).filter_by(user_id=_user.id).exists()
+    return {
+        "status": bool(
+            database.query(Preferences).filter_by(user_id=_user.id).count()
+        )
+    }
 
 
 @router.post(
