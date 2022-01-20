@@ -33,19 +33,25 @@ async def form_questions(
     POST route for form questions
     """
     try:
+        _email = decode_jwt(token)["user_email"].split("@")[0]
+        year = 2 if _email[5] == 0 else 1
         database = SessionLocal()
         if domain.domain == "PR&C":
             questions = (
-                database.query(Questions).filter_by(domain="PRC").all()
+                database.query(Questions)
+                .filter_by(domain=f"PRC{year}")
+                .all()
             )
         elif domain.domain == "OC":
             questions = (
-                database.query(Questions).filter_by(domain="NOC").all()
+                database.query(Questions)
+                .filter_by(domain=f"NOC{year}")
+                .all()
             )
         elif domain.domain == "MARKETING":
             questions = (
                 database.query(Questions)
-                .filter_by(domain="MARKETING")
+                .filter_by(domain=f"MARKETING{year}")
                 .all()
             )
         elif domain.domain == "AMBIENCE":
@@ -56,13 +62,16 @@ async def form_questions(
             )
         elif domain.domain == "EVENTS":
             questions = (
-                database.query(Questions).filter_by(domain="EVENTS").all()
+                database.query(Questions)
+                .filter_by(domain=f"EVENTS{year}")
+                .all()
             )
-        elif domain.domain == "ALL":
-            questions = database.query(Questions).all()
+        elif domain.domain == "DESIGN":
+            questions = (
+                database.query(Questions).filter_by(domain="DESIGN").all()
+            )
         else:
             questions = []
-
         logger.info(f"{domain.domain} form questions retrieved")
         email = decode_jwt(token)["user_email"]
         user = database.query(Users).filter_by(email=email).first()
