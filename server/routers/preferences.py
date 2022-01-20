@@ -26,7 +26,7 @@ router = APIRouter(
 )
 async def check_preferences(
     token: str = Depends(JWTBearer()),
-) -> PreferenceResponseModel:
+):
     """
     GET route for preferences
     """
