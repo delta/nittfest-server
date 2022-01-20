@@ -39,6 +39,18 @@ class AnswerRequestModel(BaseModel):
         description="Answer for the question",
     )
 
+    preference_no: int = Field(
+        ...,
+        title="Preference",
+        description="Preference number",
+    )
+
+    domain: str = Field(
+        ...,
+        title="Domain",
+        description="Domain of the question",
+    )
+
 
 class AnswerResponseModel(BaseModel):
     """

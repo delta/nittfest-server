@@ -11,6 +11,7 @@ from server.models.questions import (
 from server.models.errors import GenericError
 from server.config.database import SessionLocal
 from server.schemas.questions import Questions, Answer
+from server.schemas.preferences import Preferences
 from server.schemas.users import Users
 from server.controllers.auth import JWTBearer, decode_jwt
 from server.config.logger import logger
@@ -136,6 +137,24 @@ async def form_questions_submit(
                 database.query(Answer).filter_by(
                     user_id=user.id, question_id=answer["question_id"]
                 ).update({"answer": answer["answer"]})
+
+        if not (
+            database.query(Preferences)
+            .filter_by(
+                user_id=user.id, preference_no=answers.preference_no
+            )
+            .first()
+        ):
+
+            database.add(
+                Preferences(
+                    user_id=user.id,
+                    preference_no=answers.preference_no,
+                    domain=answers.domain,
+                )
+            )
+        else:
+            raise GenericError("Preferences already filled")
 
         database.commit()
         database.close()
