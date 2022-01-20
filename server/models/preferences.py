@@ -37,3 +37,18 @@ class PreferenceRequestModel(BaseModel):
         title="Preference 3",
         description="Preference 3 for the user",
     )
+    preference_4: str = Field(
+        ...,
+        title="Preference 4",
+        description="Preference 4 for the user",
+    )
+    preference_5: str = Field(
+        ...,
+        title="Preference 5",
+        description="Preference 5 for the user",
+    )
+    preference_6: str = Field(
+        ...,
+        title="Preference 6",
+        description="Preference 6 for the user",
+    )
