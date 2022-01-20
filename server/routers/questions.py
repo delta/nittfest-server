@@ -34,7 +34,7 @@ async def form_questions(
     """
     try:
         _email = decode_jwt(token)["user_email"].split("@")[0]
-        year = 2 if _email[5] == 0 else 1
+        year = 2 if _email[5] == "0" else 1
         database = SessionLocal()
         if domain.domain == "PR&C":
             questions = (
