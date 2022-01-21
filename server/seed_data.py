@@ -37,13 +37,6 @@ async def seed():
                     "domain": "PRC2",
                 },
                 {
-                    "question": "What ideas you have for promoting "
-                    + "NITTFEST other than sharing online posts?",
-                    "is_subjective": True,
-                    "options": [],
-                    "domain": "PRC2",
-                },
-                {
                     "question": "Ideate a few tagline suggestions",
                     "is_subjective": True,
                     "options": [],
