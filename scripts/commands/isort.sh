@@ -1,3 +1,3 @@
 #!/bin/sh
 
-pipenv run isort scripts/ server/
+pipenv run isort scripts/ server/ tests/

@@ -2,13 +2,19 @@
 Seed Question data
 """
 
-from scripts.test_constants import test_domains,test_answers,test_prefs,test_questions,test_user
 from config.database import TestSessionLocal
 from config.logger import logger
+from scripts.test_constants import (
+    test_answers,
+    test_domains,
+    test_prefs,
+    test_questions,
+    test_user,
+)
 from server.schemas.domains import Domains
-from server.schemas.users import Users
 from server.schemas.preferences import Preferences
-from server.schemas.questions import Questions,Answer
+from server.schemas.questions import Answer, Questions
+from server.schemas.users import Users
 
 
 async def seed_testdb():
@@ -29,10 +35,10 @@ async def seed_testdb():
         if database.query(Users).count() == 0:
             database.add(
                 Users(
-                   name=test_user["name"],
-                   email=test_user["email"],
-                   mobile_number=test_user["mobile_number"],
-                   gender=test_user["gender"]
+                    name=test_user["name"],
+                    email=test_user["email"],
+                    mobile_number=test_user["mobile_number"],
+                    gender=test_user["gender"],
                 )
             )
         if database.query(Preferences).count() == 0:
@@ -41,7 +47,7 @@ async def seed_testdb():
                     Preferences(
                         user_id=prefs["user_id"],
                         preference_no=prefs["preference_no"],
-                        domain_id=prefs["domain_id"]
+                        domain_id=prefs["domain_id"],
                     )
                 )
         if database.query(Questions).count() == 0:
@@ -61,7 +67,7 @@ async def seed_testdb():
                     Answer(
                         answer=answer["answer"],
                         question_id=answer["question_id"],
-                        user_id=answer["user_id"]
+                        user_id=answer["user_id"],
                     )
                 )
         database.commit()

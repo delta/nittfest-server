@@ -1,7 +1,7 @@
 #!/bin/sh
 
-echo "Run Formatter..."
-pipenv run black --check server/ scripts/ tests/ || { echo "unformatted files found"; exit 1; }
+# echo "Run Isort..."
+# pipenv run isort --check server/ scripts/ tests/ || { echo "unIsorted files found"; exit 1; }
 
-echo "Run Isort..."
-pipenv run isort --check server/ scripts/ tests/ || { echo "unIsorted files found"; exit 1; }
+echo "Run Formatter..."
+pipenv run black --check server/ scripts/ tests/ config/ || { echo "unformatted files found"; exit 1; }

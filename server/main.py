@@ -18,8 +18,8 @@ app.include_router(admin.router)
 
 origins = [settings.frontend_url]
 
-Base.metadata.create_all(bind=engines['main'])
-Base.metadata.create_all(bind=engines['test'])
+Base.metadata.create_all(bind=engines["main"])
+Base.metadata.create_all(bind=engines["test"])
 
 app.add_middleware(
     CORSMiddleware,

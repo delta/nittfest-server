@@ -7,9 +7,12 @@ from config.database import SessionLocal
 from config.logger import logger
 from server.controllers.auth import JWTBearer, decode_jwt
 from server.models.errors import GenericError
-from server.models.questions import (AnswerRequestModel, AnswerResponseModel,
-                                     QuestionRequestModel,
-                                     QuestionResponseModel)
+from server.models.questions import (
+    AnswerRequestModel,
+    AnswerResponseModel,
+    QuestionRequestModel,
+    QuestionResponseModel,
+)
 from server.schemas.domains import Domains
 from server.schemas.questions import Answer, Questions
 from server.schemas.users import Users

@@ -3,6 +3,7 @@ Script to send mail using mailGun
 """
 
 from datetime import date
+
 import requests
 
 from config.settings import settings
@@ -16,18 +17,14 @@ def send_mail():
     sends mail the response csv to fest-core via mail-gun api
     """
     try:
-        with open(f"{file_path}/preferences-{date.today()}.csv",
-        encoding="UTF-8",
+        with open(
+            f"{file_path}/preferences-{date.today()}.csv",
+            encoding="UTF-8",
         ) as file:
             res = requests.post(
                 f"https://api.mailgun.net/v3/{settings.mailgun_domain}/messages",
                 auth=("api", settings.mailgun_key),
-                files=[
-                    (
-                        "attachment",
-                        file
-                    )
-                ],
+                files=[("attachment", file)],
                 data={
                     "from": f"NITTFEST-WebOps <mailgun@{settings.mailgun_domain}>",
                     "to": [settings.core_mail],

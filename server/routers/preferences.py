@@ -7,12 +7,16 @@ from fastapi import APIRouter, Depends, HTTPException
 from config.database import SessionLocal
 from config.logger import logger
 from server.controllers.auth import JWTBearer, decode_jwt
-from server.controllers.preferences import (check_duplicate_preferences,
-                                            get_preferences_by_id,
-                                            validate_preferences)
+from server.controllers.preferences import (
+    check_duplicate_preferences,
+    get_preferences_by_id,
+    validate_preferences,
+)
 from server.models.errors import GenericError
-from server.models.preferences import (PreferenceRequestModel,
-                                       PreferenceResponseModel)
+from server.models.preferences import (
+    PreferenceRequestModel,
+    PreferenceResponseModel,
+)
 from server.schemas.preferences import Preferences
 from server.schemas.users import Users
 

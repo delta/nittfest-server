@@ -29,7 +29,7 @@ def sign_jwt(user_email: str, user_name: str) -> dict[str, str]:
         "user_email": user_email,
         "user_name": user_name,
     }
-    token = JWT.encode(payload=payload,key=jwt_secret,algorithm=jwt_algo)
+    token = JWT.encode(payload=payload, key=jwt_secret, algorithm=jwt_algo)
 
     return jwt_response(token)
 

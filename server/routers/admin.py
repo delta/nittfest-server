@@ -6,10 +6,12 @@ from fastapi.exceptions import HTTPException
 from fastapi.params import Depends
 from starlette.responses import FileResponse
 
-from scripts.parser.parser import (generate_forms_responses,
-                                   generate_preferences)
 from config.logger import logger
 from config.settings import settings
+from scripts.parser.parser import (
+    generate_forms_responses,
+    generate_preferences,
+)
 from server.controllers.auth import JWTBearer, decode_jwt
 from server.models.admin import DownloadFormResponsesRequestModel
 from server.models.errors import GenericError

@@ -1,3 +1,4 @@
+# pylint: skip-file
 from logging.config import fileConfig
 from os import environ
 

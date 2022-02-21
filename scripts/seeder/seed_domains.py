@@ -2,9 +2,9 @@
 Seed Question data
 """
 
-from scripts.constants import domains
 from config.database import SessionLocal
 from config.logger import logger
+from scripts.constants import domains
 from server.schemas.domains import Domains
 
 

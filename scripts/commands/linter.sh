@@ -1,3 +1,3 @@
 #!/bin/sh
 
-pipenv run pylint scripts/ server/
+pipenv run pylint scripts/ server/ tests/

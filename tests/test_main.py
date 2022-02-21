@@ -3,10 +3,11 @@ Test
 """
 from fastapi.testclient import TestClient
 
-from server.main import app
 from config.database import TestSessionLocal
+from server.main import app
 
 client = TestClient(app)
+
 
 def get_database():
     """

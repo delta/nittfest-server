@@ -7,8 +7,8 @@ from typing import Tuple
 
 import pymysql
 
-from scripts.constants import prefs_title
 from config.settings import settings
+from scripts.constants import prefs_title
 
 NO_OF_PREFS = 3
 
@@ -27,7 +27,8 @@ def get_query_year(year: int) -> str:
     switcher = {1: "1", 2: "0", 3: "9", 4: "8"}
     return switcher.get(year)
 
-def get_answers(question_list:list,user:Tuple)->list:
+
+def get_answers(question_list: list, user: Tuple) -> list:
     """
     function to get response answer of a user
     """
@@ -41,6 +42,7 @@ def get_answers(question_list:list,user:Tuple)->list:
             row.append(answer[1])
             answers.close()
     return row
+
 
 async def generate_preferences():
     """
@@ -110,7 +112,7 @@ async def generate_forms_responses(domain: str, year: int) -> str:
         f"SELECT * from users where POSITION({get_query_year(year)} IN email) = 6"
     )
     for user in users:
-        data.append(get_answers(question_list,user))
+        data.append(get_answers(question_list, user))
     filepath = f"scripts/parser/{domain}-{year}-{date.today()}.csv"
     with open(
         filepath,
