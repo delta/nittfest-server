@@ -13,6 +13,7 @@ pre-commit = "==2.1.0"
 black = "==21.12b0"
 pylint = "==2.12.2"
 pytest = "==6.2.5"
+isort = "==5.10.1"
 
 [packages]
 fastapi = "==0.70.0"
@@ -24,8 +25,10 @@ alembic = "==1.7.5"
 PyMySQL = "==1.0.2"
 cryptography = "==36.0.1"
 requests = "==2.26.0"
-pyjwt = "*"
 pydantic = "==1.9.0"
+razorpay = "*"
+pyjwt = "==2.3.0"
+pytest = "==7.0.1"
 
 [requires]
 python_version = "3.9"

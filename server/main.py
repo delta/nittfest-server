@@ -4,29 +4,22 @@ Main File
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from server.config.settings import settings
-from server.routers import auth, questions, preferences
-from server.config.database import engine, Base
-from server.seed_data import seed
+
+from config.database import Base, engines
+from config.settings import settings
+from server.routers import admin, auth, preferences, questions, seeds
 
 app = FastAPI()
 app.include_router(auth.router)
 app.include_router(questions.router)
 app.include_router(preferences.router)
-
-
-@app.on_event("startup")
-async def startup():
-    """
-    Startup function
-    """
-    await seed()
-
+app.include_router(seeds.router)
+app.include_router(admin.router)
 
 origins = [settings.frontend_url]
 
-Base.metadata.create_all(bind=engine)
-
+Base.metadata.create_all(bind=engines['main'])
+Base.metadata.create_all(bind=engines['test'])
 
 app.add_middleware(
     CORSMiddleware,
@@ -35,11 +28,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.get("/status")
-def status():
-    """
-    get route for status
-    """
-    return {"status": "ok"}

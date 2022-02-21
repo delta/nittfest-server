@@ -8,7 +8,8 @@ do
 done
 
 echo -e "\e[34m >>> Running migrations \e[97m"
-alembic upgrade head
+alembic -x db=development upgrade head &&
+alembic -x db=test upgrade head
 if [ $? -eq 0 ]; then
     echo -e "\e[32m >>> Migration successful \e[97m"
 else

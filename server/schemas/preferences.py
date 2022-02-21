@@ -2,9 +2,9 @@
 Schema for preferences.
 """
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, ForeignKey, Integer
 
-from server.config.database import Base
+from config.database import Base
 
 
 class Preferences(Base):
@@ -14,17 +14,17 @@ class Preferences(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     preference_no = Column(Integer)
-    domain = Column(String(100))
+    domain_id = Column(Integer, ForeignKey("domains.id"))
 
-    def __init__(self, user_id, preference_no, domain):
+    def __init__(self, user_id, preference_no, domain_id):
         self.user_id = user_id
         self.preference_no = preference_no
-        self.domain = domain
+        self.domain_id = domain_id
 
     def __repr__(self):
         """Representation of the object"""
         return f"""<user_id: '{self.user_id}', preference_no: '{self.preference_no}',
-        domain: '{self.domain}' >"""
+        domain_id: '{self.domain_id}' >"""
 
     def serialize(self):
         """Return object data in easily serializeable format"""
@@ -32,5 +32,5 @@ class Preferences(Base):
             "id": self.id,
             "user_id": self.user_id,
             "preference_no": self.preference_no,
-            "domain": self.domain,
+            "domain_id": self.domain_id,
         }

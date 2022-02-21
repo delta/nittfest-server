@@ -15,4 +15,4 @@ RUN pipenv install --system --deploy --ignore-pipfile
 
 COPY . .
 
-CMD [ "/app/docker/scripts/entrypoint-prod.sh" ]
+CMD [ "/app/scripts/docker/entrypoint-prod.sh" ]

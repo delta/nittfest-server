@@ -4,14 +4,17 @@ Test
 from fastapi.testclient import TestClient
 
 from server.main import app
+from config.database import TestSessionLocal
 
 client = TestClient(app)
 
-
-def test_read_main():
+def get_database():
     """
-    Mock response
+    Dependency function to get
+    SessionLocal for testing
     """
-    response = client.get("/status")
-    assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    try:
+        database = TestSessionLocal()
+        yield database
+    finally:
+        database.close()

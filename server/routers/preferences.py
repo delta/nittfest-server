@@ -2,18 +2,19 @@
 Preference router.
 """
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
-from server.schemas.users import Users
-from server.models.preferences import (
-    PreferenceResponseModel,
-    PreferenceRequestModel,
-)
-from server.models.errors import GenericError
-from server.schemas.preferences import Preferences
+from config.database import SessionLocal
+from config.logger import logger
 from server.controllers.auth import JWTBearer, decode_jwt
-from server.config.database import SessionLocal
-from server.config.logger import logger
+from server.controllers.preferences import (check_duplicate_preferences,
+                                            get_preferences_by_id,
+                                            validate_preferences)
+from server.models.errors import GenericError
+from server.models.preferences import (PreferenceRequestModel,
+                                       PreferenceResponseModel)
+from server.schemas.preferences import Preferences
+from server.schemas.users import Users
 
 router = APIRouter(
     prefix="/preferences",
@@ -54,27 +55,46 @@ async def post_preferences(
     """
     try:
         email = decode_jwt(token)["user_email"]
+        yearcode = email.split("@")[0]
+        isfirstyear = bool(yearcode[5] == "1")
+        if not isfirstyear:
+            raise GenericError("User Not First-Year")
+
         database = SessionLocal()
         user = database.query(Users).filter_by(email=email).first()
         if not user:
             database.close()
             raise GenericError("User Not found")
 
-        for i in range(1, 7):
+        pref_ids = get_preferences_by_id(
+            preferences=preferences.preferences, database=database
+        )
+
+        if validate_preferences(pref_ids):
+            raise GenericError("Prior-Preference is not filled")
+
+        if check_duplicate_preferences(pref_ids):
+            raise GenericError("Duplicate Entries Found")
+
+        for i, pref in enumerate(pref_ids):
             if (
-                database.query(Preferences)
-                .filter_by(user_id=user.id, preference_no=i)
+                not database.query(Preferences)
+                .filter_by(user_id=user.id, preference_no=i + 1)
                 .count()
             ):
-                database.query(Preferences).filter_by(
-                    user_id=user.id, preference_no=i
-                ).delete()
-        database.add(Preferences(user.id, 1, preferences.preference_1))
-        database.add(Preferences(user.id, 2, preferences.preference_2))
-        database.add(Preferences(user.id, 3, preferences.preference_3))
-        database.add(Preferences(user.id, 4, preferences.preference_4))
-        database.add(Preferences(user.id, 5, preferences.preference_5))
-        database.add(Preferences(user.id, 6, preferences.preference_6))
+                database.add(
+                    Preferences(
+                        user_id=user.id,
+                        preference_no=i + 1,
+                        domain_id=pref,
+                    )
+                )
+
+            else:
+                raise GenericError("Preferences Already Filled")
+        database.query(Users).filter_by(id=user.id).update(
+            dict(prefered_email=preferences.email)
+        )
         database.commit()
         database.close()
         logger.info(f"{email} form preferences submitted")
@@ -86,5 +106,5 @@ async def post_preferences(
         )
         raise HTTPException(
             status_code=403,
-            detail="User not found",
+            detail=f"{exception}",
         ) from exception

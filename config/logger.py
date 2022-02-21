@@ -2,8 +2,10 @@
 logger config
 """
 import os
+
 from loguru import logger
-from server.config.settings import settings
+
+from config.settings import settings
 
 logs_dir = os.path.join(os.path.dirname(__file__), "../logs")
 

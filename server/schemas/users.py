@@ -4,7 +4,7 @@ Users Schema
 
 from sqlalchemy import Column, Integer, String
 
-from server.config.database import Base
+from config.database import Base
 
 
 class Users(Base):

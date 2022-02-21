@@ -2,10 +2,11 @@
 Auth controllers
 """
 import jwt as JWT
-from fastapi import HTTPException, status, Request
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from server.config.settings import settings
-from server.config.logger import logger
+from fastapi import HTTPException, Request, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
+from config.logger import logger
+from config.settings import settings
 
 jwt_secret = settings.jwt_secret
 jwt_algo = settings.jwt_algo
@@ -28,7 +29,7 @@ def sign_jwt(user_email: str, user_name: str) -> dict[str, str]:
         "user_email": user_email,
         "user_name": user_name,
     }
-    token = JWT.encode(payload, jwt_secret, algorithm=jwt_algo)
+    token = JWT.encode(payload=payload,key=jwt_secret,algorithm=jwt_algo)
 
     return jwt_response(token)
 

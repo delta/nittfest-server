@@ -9,6 +9,7 @@ services:
       - .env
     volumes:
       - ./mysql_volume:/var/lib/mysql
+      - ./scripts/initdb:/docker-entrypoint-initdb.d
 
   pma:
     image: phpmyadmin/phpmyadmin

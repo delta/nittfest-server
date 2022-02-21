@@ -4,12 +4,12 @@ Auth route
 
 import requests
 from fastapi import APIRouter, HTTPException
-from server.config.settings import settings
-from server.schemas.users import Users
 
-from server.config.database import SessionLocal
+from config.database import SessionLocal
+from config.logger import logger
+from config.settings import settings
 from server.controllers.auth import sign_jwt
-from server.config.logger import logger
+from server.schemas.users import Users
 
 router = APIRouter(
     prefix="/auth",
@@ -23,28 +23,24 @@ async def fetch_user_details(
     """
     Handles the callback route and fetches the user details
     """
-    auth_code = code
 
-    client_id = settings.client_id
-    client_secret = settings.client_secret
-    redirect_url = settings.redirect_url
     params = {
-        "client_id": client_id,
-        "client_secret": client_secret,
+        "client_id": settings.client_id,
+        "client_secret": settings.client_secret,
         "grant_type": "authorization_code",
-        "code": auth_code,
-        "redirect_uri": redirect_url,
+        "code": code,
+        "redirect_uri": settings.redirect_url,
     }
     try:
         token_response = requests.post(
-            url="https://auth.delta.nitt.edu/api/oauth/token", data=params
+            url=settings.token_endpoint, data=params
         ).json()
         logger.debug(token_response)
         headers = {
             "Authorization": "Bearer " + token_response["access_token"]
         }
         userdetails = requests.post(
-            url="https://auth.delta.nitt.edu/api/resources/user",
+            url=settings.resource_endpoint,
             headers=headers,
         ).json()
         session = SessionLocal()
@@ -54,10 +50,10 @@ async def fetch_user_details(
             .first()
         ):
             new_user = Users(
-                userdetails["name"],
-                userdetails["email"],
-                userdetails["phoneNumber"],
-                userdetails["gender"],
+                name=userdetails["name"],
+                email=userdetails["email"],
+                mobile_number=userdetails["phoneNumber"],
+                gender=userdetails["gender"],
             )
             session.add(new_user)
             session.commit()

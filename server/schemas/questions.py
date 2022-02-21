@@ -2,10 +2,10 @@
 Questions Schema
 """
 
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.types import PickleType
 
-from server.config.database import Base
+from config.database import Base
 
 
 class Questions(Base):
@@ -14,15 +14,17 @@ class Questions(Base):
     __tablename__ = "questions"
     id = Column(Integer, primary_key=True)
     question = Column(String(2000))
+    year = Column(Integer)
     is_subjective = Column(Boolean)
     options = Column(PickleType)
-    domain = Column(String(100))
+    domain_id = Column(Integer, ForeignKey("domains.id"))
 
-    def __init__(self, question, is_subjective, options, domain):
+    def __init__(self, question, is_subjective, options, domain_id, year):
         self.question = question
         self.is_subjective = is_subjective
         self.options = options
-        self.domain = domain
+        self.domain_id = domain_id
+        self.year = year
 
     def __repr__(self):
         """Representation of the object"""
@@ -35,7 +37,6 @@ class Questions(Base):
             "question": self.question,
             "is_subjective": self.is_subjective,
             "options": self.options,
-            "domain": self.domain,
         }
 
 

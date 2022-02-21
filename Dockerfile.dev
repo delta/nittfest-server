@@ -18,4 +18,4 @@ RUN pipenv install --system --dev
 
 COPY . .
 
-CMD [ "/app/docker/scripts/entrypoint-dev.sh" ]
+CMD [ "/app/scripts/docker/entrypoint-dev.sh" ]
