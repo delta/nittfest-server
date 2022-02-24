@@ -2,18 +2,18 @@
 Seed Question data
 """
 
-from config.database import SessionLocal
+from sqlalchemy.orm import Session
+
 from config.logger import logger
 from scripts.constants import domains
 from server.schemas.domains import Domains
 
 
-async def seed_domains():
+async def seed_domains(database: Session):
     """
     Seed the database with teams
     """
     try:
-        database = SessionLocal()
         if database.query(Domains).count() == 0:
             logger.info("Seeding database with domains")
             for domain in domains:
@@ -23,9 +23,9 @@ async def seed_domains():
                         description=domain["description"],
                     )
                 )
-            database.commit()
             logger.info("Successfully seeded database with domains")
-            database.close()
+        database.commit()
+        database.close()
     except Exception as exception:
         logger.error(f"failed to seed domains {exception}")
         database.rollback()

@@ -1,10 +1,10 @@
 """
 Preference router.
 """
-
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
-from config.database import SessionLocal
+from config.database import get_database
 from config.logger import logger
 from server.controllers.auth import JWTBearer, decode_jwt
 from server.controllers.preferences import (
@@ -27,32 +27,43 @@ router = APIRouter(
 
 @router.get(
     "/",
-    dependencies=[Depends(JWTBearer())],
+    dependencies=[Depends(JWTBearer()), Depends(get_database)],
 )
 async def check_preferences(
     token: str = Depends(JWTBearer()),
+    database: Session = Depends(get_database),
 ) -> PreferenceResponseModel:
     """
     GET route for preferences
     """
-    database = SessionLocal()
-    _email = decode_jwt(token)["user_email"]
-    _user = database.query(Users).filter_by(email=_email).first()
-
-    return {
-        "status": bool(
-            database.query(Preferences).filter_by(user_id=_user.id).count()
-        )
-    }
+    try:
+        email = decode_jwt(token)["user_email"]
+        user = database.query(Users).filter_by(email=email).first()
+        if not user:
+            raise GenericError("User Not found")
+        return {
+            "status": bool(
+                database.query(Preferences)
+                .filter_by(user_id=user.id)
+                .count()
+            )
+        }
+    except GenericError as exception:
+        logger.error(f"failed due to {exception}")
+        raise HTTPException(
+            status_code=403,
+            detail=f"{exception}",
+        ) from exception
 
 
 @router.post(
     "/",
-    dependencies=[Depends(JWTBearer())],
+    dependencies=[Depends(JWTBearer()), Depends(get_database)],
 )
 async def post_preferences(
     preferences: PreferenceRequestModel,
     token: str = Depends(JWTBearer()),
+    database: Session = Depends(get_database),
 ) -> PreferenceResponseModel:
     """
     Post route for preferences
@@ -63,11 +74,8 @@ async def post_preferences(
         isfirstyear = bool(yearcode[5] == "1")
         if not isfirstyear:
             raise GenericError("User Not First-Year")
-
-        database = SessionLocal()
         user = database.query(Users).filter_by(email=email).first()
         if not user:
-            database.close()
             raise GenericError("User Not found")
 
         pref_ids = get_preferences_by_id(
@@ -99,8 +107,6 @@ async def post_preferences(
         database.query(Users).filter_by(id=user.id).update(
             dict(prefered_email=preferences.email)
         )
-        database.commit()
-        database.close()
         logger.info(f"{email} form preferences submitted")
         return {"status": True}
 

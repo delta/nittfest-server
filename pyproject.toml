@@ -4,9 +4,6 @@ addopts = "-v"
 testpaths = [
     "tests"
 ]
-norecursedirs = [
-
-]
 
 [tool.pylint.'MESSAGES CONTROL']
 extension-pkg-whitelist = "pydantic"
@@ -14,7 +11,11 @@ extension-pkg-whitelist = "pydantic"
 [tool.black]
 line-length = 75
 exclude = '''
-/(
-  | versions
+^/(
+  \.githooks
+  | \.github
+  | \.venv
+  | migrations
+  | mysql_volume
 )/
 '''

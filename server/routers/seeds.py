@@ -1,11 +1,13 @@
 """
 seeding route
 """
-from fastapi import APIRouter
 
+from fastapi import APIRouter
+from sqlalchemy.orm.session import Session
+
+from config.database import SessionLocal
 from scripts.seeder.seed_domains import seed_domains
 from scripts.seeder.seed_questions import seed_questions
-from scripts.seeder.seed_tests import seed_testdb
 
 router = APIRouter()
 
@@ -15,6 +17,8 @@ async def seed():
     """
     Seeds Domain when server starts
     """
-    await seed_domains()
-    await seed_questions()
-    await seed_testdb()
+    database: Session = SessionLocal()
+    await seed_domains(database=database)
+    await seed_questions(database=database)
+    database.commit()
+    database.close()

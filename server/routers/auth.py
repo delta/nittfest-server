@@ -4,8 +4,10 @@ Auth route
 
 import requests
 from fastapi import APIRouter, HTTPException
+from fastapi.param_functions import Depends
+from sqlalchemy.orm import Session
 
-from config.database import SessionLocal
+from config.database import get_database
 from config.logger import logger
 from config.settings import settings
 from server.controllers.auth import sign_jwt
@@ -18,7 +20,7 @@ router = APIRouter(
 
 @router.get("/callback/")
 async def fetch_user_details(
-    code: str,
+    code: str, session: Session = Depends(get_database)
 ):
     """
     Handles the callback route and fetches the user details
@@ -43,7 +45,6 @@ async def fetch_user_details(
             url=settings.resource_endpoint,
             headers=headers,
         ).json()
-        session = SessionLocal()
         if (
             not session.query(Users)
             .filter_by(email=userdetails["email"])

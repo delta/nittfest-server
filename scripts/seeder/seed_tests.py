@@ -2,7 +2,8 @@
 Seed Question data
 """
 
-from config.database import TestSessionLocal
+from requests.sessions import Session
+
 from config.logger import logger
 from scripts.test_constants import (
     test_answers,
@@ -17,12 +18,11 @@ from server.schemas.questions import Answer, Questions
 from server.schemas.users import Users
 
 
-async def seed_testdb():
+async def seed_testdb(database: Session):
     """
     Seed the database with teams
     """
     try:
-        database = TestSessionLocal()
         logger.info("Seeding test database")
         if database.query(Domains).count() == 0:
             for domain in test_domains:
@@ -70,8 +70,8 @@ async def seed_testdb():
                         user_id=answer["user_id"],
                     )
                 )
-        database.commit()
         logger.info("Successfully seeded test database")
+        database.commit()
         database.close()
     except Exception as exception:
         logger.error(f"failed to seed tests {exception}")

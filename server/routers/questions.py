@@ -2,8 +2,8 @@
 Form Questions Model
 """
 from fastapi import APIRouter, Depends, HTTPException
-
-from config.database import SessionLocal
+from sqlalchemy.orm import Session
+from config.database import get_database
 from config.logger import logger
 from server.controllers.auth import JWTBearer, decode_jwt
 from server.models.errors import GenericError
@@ -25,11 +25,12 @@ router = APIRouter(
 @router.post(
     "/",
     response_model=QuestionResponseModel,
-    dependencies=[Depends(JWTBearer())],
+    dependencies=[Depends(JWTBearer()), Depends(get_database)],
 )
 async def form_questions(
     domain_requested: QuestionRequestModel,
     token: str = Depends(JWTBearer()),
+    database: Session = Depends(get_database),
 ) -> QuestionResponseModel:
     """
     POST route for form questions
@@ -37,14 +38,13 @@ async def form_questions(
     try:
         email = decode_jwt(token)["user_email"]
         year = 2 if email[5] == "0" else 1
-        database = SessionLocal()
         domain = (
             database.query(Domains)
             .filter_by(domain=domain_requested.domain)
             .first()
         )
         if not domain:
-            database.close()
+
             raise GenericError("INVALID domain requested")
         user = database.query(Users).filter_by(email=email).first()
         questions = (
@@ -70,7 +70,7 @@ async def form_questions(
             else:
                 response["answer"] = ""
             response_questions.append(response)
-        database.close()
+
         return {"questions": response_questions}
     except GenericError as exception:
         logger.error(
@@ -86,21 +86,21 @@ async def form_questions(
 @router.post(
     "/submit",
     response_model=AnswerResponseModel,
-    dependencies=[Depends(JWTBearer())],
+    dependencies=[Depends(JWTBearer()), Depends(get_database)],
 )
 async def form_questions_submit(
     answers_submitted: AnswerRequestModel,
     token: str = Depends(JWTBearer()),
+    database: Session = Depends(get_database),
 ) -> AnswerResponseModel:
     """
     POST route for form questions
     """
     try:
-        database = SessionLocal()
         email = decode_jwt(token)["user_email"]
         user = database.query(Users).filter_by(email=email).first()
         if not user:
-            database.close()
+
             raise GenericError("User not found")
         for answer in answers_submitted.answers:
             # If user_id and question_id are not found, then create a new answer
@@ -124,8 +124,6 @@ async def form_questions_submit(
                     user_id=user.id, question_id=answer["question_id"]
                 ).update({"answer": answer["answer"]})
 
-        database.commit()
-        database.close()
         logger.info(f"{email} form answers submitted")
         return {"message": "Answers submitted successfully"}
 

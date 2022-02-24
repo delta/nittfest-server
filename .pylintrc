@@ -1,6 +1,12 @@
 [MASTER]
 init-hook="from pylint.config import find_pylintrc; import os, sys; sys.path.append(os.path.dirname(find_pylintrc()))"
-ignore=migrations/versions/*.py
+ignore-paths=^migrations/versions/*.py,
+             ^.venv
 min-public-methods=0
 extension-pkg-whitelist=pydantic
 max-args = 6
+[SIMILARITIES]
+min-similarity-lines=4
+ignore-comments=yes
+ignore-docstrings=yes
+ignore-imports=yes

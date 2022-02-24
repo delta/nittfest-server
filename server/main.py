@@ -5,7 +5,7 @@ Main File
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from config.database import Base, engines
+from config.database import Base, engine
 from config.settings import settings
 from server.routers import admin, auth, preferences, questions, seeds
 
@@ -18,8 +18,7 @@ app.include_router(admin.router)
 
 origins = [settings.frontend_url]
 
-Base.metadata.create_all(bind=engines["main"])
-Base.metadata.create_all(bind=engines["test"])
+Base.metadata.create_all(bind=engine)
 
 app.add_middleware(
     CORSMiddleware,
