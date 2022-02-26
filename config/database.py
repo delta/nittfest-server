@@ -15,7 +15,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
-test_engine = create_engine("sqlite:///test.db")
+test_engine = create_engine(settings.sqlalchemy_database_test_url)
 TestingSessionLocal = sessionmaker(
     autocommit=False, autoflush=False, bind=test_engine
 )

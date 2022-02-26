@@ -5,7 +5,7 @@ test constants
 test_user = {
     "id": 1,
     "name": "Muhesh",
-    "email": "1081219067@nitt.edu",
+    "email": "108121999@nitt.edu",
     "mobile_number": "9790546296",
     "gender": "MALE",
 }
@@ -18,7 +18,7 @@ test_domains = [
     },
     {
         "id": 2,
-        "domain": "EVENTS",
+        "domain": "AMBIENCE",
         "descriptions": "Team Ambience is in charge",
     },
     {
@@ -38,9 +38,10 @@ test_questions = [
     {
         "id": 1,
         "question": "Which is best club in NITT ?",
-        "is_subjective": True,
+        "is_subjective": bool(True),
         "options": None,
         "domain_id": 1,
+        "year": 1,
     }
 ]
 

@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     Settings
     """
 
-    environment: str = os.getenv("ENVIRONMENT").upper()
+    environment: str = os.getenv("ENVIRONMENT")
     mysql_user: str = os.getenv("MYSQL_USER")
     mysql_password: str = os.getenv("MYSQL_PASSWORD")
     mysql_host: str = os.getenv("MYSQL_HOST")
@@ -40,10 +40,7 @@ class Settings(BaseSettings):
         f"{mysql_password}@{mysql_host}/{mysql_db}"
     )
 
-    sqlalchemy_database_test_url: str = (
-        f"mysql+pymysql://{mysql_user}:"
-        f"{mysql_password}@{mysql_host}/{test_db}"
-    )
+    sqlalchemy_database_test_url: str = f"sqlite:///tests/{test_db}"
 
     def __str__(self):
         return self.__class__.__name__

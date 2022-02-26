@@ -18,7 +18,7 @@ from server.schemas.questions import Answer, Questions
 from server.schemas.users import Users
 
 
-async def seed_testdb(database: Session):
+def seed_testdb(database: Session):
     """
     Seed the database with teams
     """
@@ -29,7 +29,7 @@ async def seed_testdb(database: Session):
                 database.add(
                     Domains(
                         domain=domain["domain"],
-                        description=domain["description"],
+                        description=domain["descriptions"],
                     )
                 )
         if database.query(Users).count() == 0:
@@ -55,10 +55,10 @@ async def seed_testdb(database: Session):
                 database.add(
                     Questions(
                         question=question["question"],
-                        is_subjective=prefs["is_subjective"],
-                        domain_id=prefs["domain_id"],
-                        options=[],
-                        year=prefs["year"],
+                        is_subjective=question["is_subjective"],
+                        domain_id=question["domain_id"],
+                        options=question["options"],
+                        year=question["year"],
                     )
                 )
         if database.query(Answer).count() == 0:

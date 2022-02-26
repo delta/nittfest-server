@@ -2,23 +2,32 @@
 Main File
 """
 
+import sys
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config.database import Base, engine
 from config.settings import settings
-from server.routers import admin, auth, preferences, questions, seeds
+
+if "pytest" in sys.modules:
+    from server.routers import auth, preferences, questions
+else:
+    from server.routers import admin, auth, preferences, questions, seeds
 
 app = FastAPI()
+
 app.include_router(auth.router)
 app.include_router(questions.router)
 app.include_router(preferences.router)
-app.include_router(seeds.router)
-app.include_router(admin.router)
+origins = []
 
-origins = [settings.frontend_url]
+if "pytest" not in sys.modules:
+    app.include_router(seeds.router)
+    app.include_router(admin.router)
+    Base.metadata.create_all(bind=engine)
+    origins.append(settings.frontend_url)
 
-Base.metadata.create_all(bind=engine)
 
 app.add_middleware(
     CORSMiddleware,

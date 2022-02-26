@@ -173,5 +173,6 @@ sql_app.db
 mysql_volume/
 *.csv
 *.sql
+*.sqlite
 *.log
 .pytest_cache

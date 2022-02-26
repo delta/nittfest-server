@@ -40,3 +40,8 @@ jobs:
       - name: Run pylint
         run: |
           pipenv run pylint --fail-under=10 server tests
+      
+      - name: Run pytest
+        run: |
+          cp .env.example .env
+          pipenv run pytest    

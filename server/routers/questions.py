@@ -3,6 +3,7 @@ Form Questions Model
 """
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from config.database import get_database
 from config.logger import logger
 from server.controllers.auth import JWTBearer, decode_jwt
@@ -38,6 +39,9 @@ async def form_questions(
     try:
         email = decode_jwt(token)["user_email"]
         year = 2 if email[5] == "0" else 1
+        user = database.query(Users).filter_by(email=email).first()
+        if not user:
+            raise GenericError("User not found")
         domain = (
             database.query(Domains)
             .filter_by(domain=domain_requested.domain)
@@ -78,7 +82,7 @@ async def form_questions(
         )
         raise HTTPException(
             status_code=500,
-            detail="INTERNAL SERVER ERROR",
+            detail=f"{exception}",
             headers={"X-Error": str(exception)},
         ) from exception
 
@@ -100,7 +104,6 @@ async def form_questions_submit(
         email = decode_jwt(token)["user_email"]
         user = database.query(Users).filter_by(email=email).first()
         if not user:
-
             raise GenericError("User not found")
         for answer in answers_submitted.answers:
             # If user_id and question_id are not found, then create a new answer

@@ -1,10 +1,6 @@
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-v"
-testpaths = [
-    "tests"
-]
-
 [tool.pylint.'MESSAGES CONTROL']
 extension-pkg-whitelist = "pydantic"
 
