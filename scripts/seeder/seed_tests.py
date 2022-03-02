@@ -39,6 +39,7 @@ def seed_testdb(database: Session):
                     email=test_user["email"],
                     mobile_number=test_user["mobile_number"],
                     gender=test_user["gender"],
+                    department_id=test_user["department_id"],
                 )
             )
         if database.query(Preferences).count() == 0:

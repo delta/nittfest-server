@@ -2,6 +2,7 @@
 Contants
 """
 
+
 domains = [
     {
         "domain": "AMBIENCE",
