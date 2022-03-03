@@ -13,7 +13,14 @@ from config.settings import settings
 if "pytest" in sys.modules:
     from server.routers import auth, preferences, questions
 else:
-    from server.routers import admin, auth, preferences, questions, seeds
+    from server.routers import (
+        admin,
+        auth,
+        preferences,
+        questions,
+        seeds,
+        payments,
+    )
 
 app = FastAPI()
 
@@ -25,6 +32,7 @@ origins = []
 if "pytest" not in sys.modules:
     app.include_router(seeds.router)
     app.include_router(admin.router)
+    app.include_router(payments.router)
     Base.metadata.create_all(bind=engine)
     origins.append(settings.frontend_url)
 

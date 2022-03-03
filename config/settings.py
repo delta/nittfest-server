@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     admin: str = os.getenv("ADMIN")
     test_db: str = os.getenv("TEST_DATABASE")
     test_jwt: str = os.getenv("TEST_JWT")
+    payment_id: str = os.getenv("PAYMENT_ID")
+    payment_secret: str = os.getenv("PAYMENT_SECRET")
 
     sqlalchemy_database_url: str = (
         f"mysql+pymysql://{mysql_user}:"
