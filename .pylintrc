@@ -5,6 +5,8 @@ ignore-paths=^migrations/versions/*.py,
 min-public-methods=0
 extension-pkg-whitelist=pydantic
 max-args = 15
+[DESIGN]
+max-attributes=12
 [SIMILARITIES]
 min-similarity-lines=4
 ignore-comments=yes

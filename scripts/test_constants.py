@@ -8,6 +8,7 @@ test_user = {
     "email": "108121999@nitt.edu",
     "mobile_number": "9790546296",
     "gender": "MALE",
+    "department_id": 1,
 }
 
 test_domains = [
