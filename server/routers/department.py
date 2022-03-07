@@ -4,15 +4,14 @@ Department Router
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from config.logger import logger
-
 
 from config.database import get_database
-from server.models.errors import GenericError
+from config.logger import logger
 from server.models.department import (
-    DepartmentResponseModel,
     DepartmentModel,
+    DepartmentResponseModel,
 )
+from server.models.errors import GenericError
 from server.schemas.department import Department
 
 router = APIRouter(prefix="/department")
@@ -32,9 +31,12 @@ async def get_departments(
     try:
         departments = database.query(Department).all()
         response: list[DepartmentModel] = []
-        for i in departments:
+        for department in departments:
             response.append(
-                DepartmentModel(name=i.name, description=i.description)
+                DepartmentModel(
+                    name=department.name,
+                    description=department.description,
+                )
             )
 
         return DepartmentResponseModel(departments=response)

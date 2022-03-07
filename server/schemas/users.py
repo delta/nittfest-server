@@ -2,7 +2,7 @@
 Users Schema
 """
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, ForeignKey, Integer, String
 
 from config.database import Base
 

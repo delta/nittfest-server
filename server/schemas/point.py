@@ -2,7 +2,7 @@
 Schema for point
 """
 
-from sqlalchemy import Column, Integer, ForeignKey, Float
+from sqlalchemy import Column, Float, ForeignKey, Integer
 
 from config.database import Base
 

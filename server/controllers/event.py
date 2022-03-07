@@ -3,12 +3,13 @@ Event controller
 """
 
 from typing import List
+
 from server.models.event import ClusterModel, EventModel, PointModel
 from server.schemas.cluster import Cluster
 from server.schemas.event import Event
 
 
-def make_reponse(
+def get_events(
     events: list[Event], clusters: list[Cluster], points: list
 ) -> list[ClusterModel]:
     """

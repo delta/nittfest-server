@@ -4,10 +4,10 @@ Events Router
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from config.logger import logger
 
 from config.database import get_database
-from server.controllers.event import make_reponse
+from config.logger import logger
+from server.controllers.event import get_events
 from server.models.errors import GenericError
 from server.models.event import ClusterModel
 from server.schemas.cluster import Cluster
@@ -38,7 +38,7 @@ async def get_event(
             .join(Department, Department.id == Point.department_id)
             .all()
         )
-        return make_reponse(events=events, clusters=cluster, points=points)
+        return get_events(events=events, clusters=cluster, points=points)
 
     except GenericError as exception:
         logger.error(f"failed due to {exception}")
