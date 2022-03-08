@@ -28,7 +28,6 @@ origins = []
 if "pytest" not in sys.modules:
     app.include_router(seeds.router)
     app.include_router(admin.router)
-    app.include_router(event.router)
     Base.metadata.create_all(bind=engine)
     origins.append(settings.frontend_url)
 
