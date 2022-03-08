@@ -7,6 +7,8 @@ from loguru import logger
 
 from config.settings import settings
 
+import sys
+
 logs_dir = os.path.join(os.path.dirname(__file__), "../logs")
 
 
@@ -17,7 +19,7 @@ def full_path(file_name):
     return os.path.join(logs_dir, file_name)
 
 
-if settings.environment != "PRODUCTION":
+if settings.environment != "PRODUCTION" and "pytest" not in sys.modules:
     logger.add(
         full_path("debug.log"),
         level="DEBUG",
@@ -31,17 +33,18 @@ if settings.environment != "PRODUCTION":
         colorize=False,
     )
 
-logger.add(
-    full_path("info.log"),
-    format="{time} {message}",
-    level="INFO",
-    enqueue=True,
-    colorize=False,
-)
-logger.add(
-    full_path("error.log"),
-    format="{time} {message}",
-    level="ERROR",
-    enqueue=True,
-    colorize=False,
-)
+if "pytest" not in sys.modules:
+    logger.add(
+        full_path("info.log"),
+        format="{time} {message}",
+        level="INFO",
+        enqueue=True,
+        colorize=False,
+    )
+    logger.add(
+        full_path("error.log"),
+        format="{time} {message}",
+        level="ERROR",
+        enqueue=True,
+        colorize=False,
+    )

@@ -55,6 +55,7 @@ async def fetch_user_details(
                 email=userdetails["email"],
                 mobile_number=userdetails["phoneNumber"],
                 gender=userdetails["gender"],
+                department_id=userdetails["deparment_id"],
             )
             session.add(new_user)
             session.commit()

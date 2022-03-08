@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config.database import Base, engine
 from config.settings import settings
+from server.routers import department, event
 
 if "pytest" in sys.modules:
     from server.routers import auth, preferences, questions
@@ -20,6 +21,8 @@ app = FastAPI()
 app.include_router(auth.router)
 app.include_router(questions.router)
 app.include_router(preferences.router)
+app.include_router(department.router)
+app.include_router(event.router)
 origins = []
 
 if "pytest" not in sys.modules:
