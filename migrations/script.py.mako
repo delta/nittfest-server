@@ -17,8 +17,9 @@ depends_on = ${repr(depends_on)}
 
 
 def upgrade():
+    """schema upgrade migrations go here."""
     ${upgrades if upgrades else "pass"}
 
-
 def downgrade():
+    """schema downgrade migrations go here."""
     ${downgrades if downgrades else "pass"}
