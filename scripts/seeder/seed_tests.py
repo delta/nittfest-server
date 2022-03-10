@@ -79,6 +79,15 @@ def seed_testdb(database: Session):
                         user_id=answer["user_id"],
                     )
                 )
+        if database.query(Department).count() == 0:
+            logger.info("Seeding database with test departments")
+            for department in test_departments:
+                database.add(
+                    Department(
+                        name=department["name"],
+                        description=department["description"],
+                    )
+                )
         if database.query(Cluster).count() == 0:
             for cluster in test_clusters:
                 database.add(
@@ -87,25 +96,16 @@ def seed_testdb(database: Session):
                         image_link=cluster["image_link"],
                     )
                 )
-        if database.query(Department).count() == 0:
-            for department in test_departments:
-                database.add(
-                    Department(
-                        name=department["name"],
-                        description=department["description"],
-                    )
-                )
         if database.query(Event).count() == 0:
-            logger.info("Seeding database with events")
             for event in test_events:
                 database.add(
                     Event(
                         name=event["name"],
                         description=event["description"],
-                        cluster_id=event["cluster_id"],
                         rules=event["rules"],
-                        form_link=event["form_link"],
+                        cluster_id=event["cluster_id"],
                         image_link=event["image_link"],
+                        form_link=event["form_link"],
                         event_link=event["event_link"],
                         start_time=event["start_time"],
                         end_time=event["end_time"],
