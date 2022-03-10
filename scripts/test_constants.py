@@ -50,56 +50,153 @@ test_answers = [
     {"id": 1, "answer": "DeltaForce", "question_id": 1, "user_id": 1}
 ]
 
+test_departments = [
+    {"name": "MME", "description": "Gods"},
+    {"name": "EEE", "description": "some generic description"},
+    {"name": "ICE", "description": "some generic description"},
+]
+
 test_clusters = [
     {
-        "id": 1,
         "name": "Arts",
-        "image_link": "http://",
+        "image_link": "http://genericlink.com/route",
+    },
+    {
+        "name": "Gaming",
+        "image_link": "http://genericlink.com/route",
     },
 ]
 
 test_events = [
     {
-        "id": 1,
-        "name": "dominoes",
-        "description": "abc",
+        "name": "Art Event 1",
+        "description": "Art Something",
         "cluster_id": 1,
-        "rules": "abc",
+        "rules": "free play",
+        "form_link": "http://genericlink.com/route",
+        "event_link": "http://genericlink.com/route",
+        "image_link": "http://genericlink.com/route",
+        "start_time": "start time",
+        "end_time": "end time",
+        "date": "date",
         "is_reg_completed": False,
         "is_event_completed": False,
-        "form_link": "http://",
-        "event_link": "http://",
-        "start_time": "9.00",
-        "end_time": "21.03.2022",
-        "date": "20.03.2022",
-        "image_link": "http://",
+    },
+    {
+        "name": "Art Event 2",
+        "description": "Art Something",
+        "cluster_id": 1,
+        "rules": "free play",
+        "form_link": "http://genericlink.com/route",
+        "event_link": "http://genericlink.com/route",
+        "image_link": "http://genericlink.com/route",
+        "start_time": "start time",
+        "end_time": "end time",
+        "date": "date",
+        "is_reg_completed": False,
+        "is_event_completed": False,
+    },
+    {
+        "name": "Gaming Event 1",
+        "description": "Game Something",
+        "cluster_id": 2,
+        "rules": "free play",
+        "form_link": "http://genericlink.com/route",
+        "event_link": "http://genericlink.com/route",
+        "image_link": "http://genericlink.com/route",
+        "start_time": "start time",
+        "end_time": "end time",
+        "date": "date",
+        "is_reg_completed": False,
+        "is_event_completed": False,
+    },
+    {
+        "name": "Gaming Event 2",
+        "description": "Game Something",
+        "cluster_id": 2,
+        "rules": "free play",
+        "form_link": "http://genericlink.com/route",
+        "event_link": "http://genericlink.com/route",
+        "image_link": "http://genericlink.com/route",
+        "start_time": "start time",
+        "end_time": "end time",
+        "date": "date",
+        "is_reg_completed": False,
+        "is_event_completed": False,
     },
 ]
 
 test_points = [
     {
-        "id": 1,
-        "point": 20,
+        "point": 10,
         "position": 1,
+        "event_id": 1,
+        "department_id": 1,
+    },
+    {
+        "point": 9,
+        "position": 2,
         "event_id": 1,
         "department_id": 2,
     },
-]
-
-test_departments = [
     {
-        "id": 1,
-        "name": "cse",
-        "description": "cse",
+        "point": 0,
+        "position": 3,
+        "event_id": 1,
+        "department_id": 3,
     },
     {
-        "id": 2,
-        "name": "archi",
-        "description": "archi",
+        "point": 20,
+        "position": 1,
+        "event_id": 2,
+        "department_id": 3,
     },
     {
-        "id": 3,
-        "name": "eee",
-        "description": "eee",
+        "point": 10,
+        "position": 2,
+        "event_id": 2,
+        "department_id": 2,
+    },
+    {
+        "point": 5,
+        "position": 3,
+        "event_id": 2,
+        "department_id": 1,
+    },
+    {
+        "point": 10,
+        "position": 1,
+        "event_id": 3,
+        "department_id": 1,
+    },
+    {
+        "point": 9,
+        "position": 2,
+        "event_id": 3,
+        "department_id": 2,
+    },
+    {
+        "point": 8,
+        "position": 3,
+        "event_id": 3,
+        "department_id": 3,
+    },
+    {
+        "point": 10,
+        "position": 1,
+        "event_id": 4,
+        "department_id": 3,
+    },
+    {
+        "point": 9,
+        "position": 2,
+        "event_id": 4,
+        "department_id": 1,
+    },
+    {
+        "point": 5,
+        "position": 3,
+        "event_id": 4,
+        "department_id": 2,
     },
 ]
