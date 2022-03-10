@@ -5,6 +5,8 @@ Revises: ${down_revision | comma,n}
 Create Date: ${create_date}
 
 """
+# pylint: skip-file
+
 from alembic import op
 import sqlalchemy as sa
 ${imports if imports else ""}
@@ -17,8 +19,9 @@ depends_on = ${repr(depends_on)}
 
 
 def upgrade():
+    """schema upgrade migrations go here."""
     ${upgrades if upgrades else "pass"}
 
-
 def downgrade():
+    """schema downgrade migrations go here."""
     ${downgrades if downgrades else "pass"}

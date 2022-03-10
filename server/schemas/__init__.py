@@ -11,14 +11,17 @@ from server.schemas.preferences import Preferences
 from server.schemas.questions import Answer, Questions
 from server.schemas.users import Users
 
+schemas = [
+    Users.metadata,
+]
+
 models = [
-    Users,
-    Questions,
-    Domains,
-    Preferences,
-    Answer,
-    Cluster,
-    Event,
-    Department,
-    Point,
+    Domains.metadata,
+    Preferences.metadata,
+    Questions.metadata,
+    Answer.metadata,
+    Cluster.metadata,
+    Event.metadata,
+    Department.metadata,
+    Point.metadata,
 ]
