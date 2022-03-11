@@ -74,5 +74,7 @@ async def fetch_user_details(
         raise HTTPException(
             status_code=500,
             detail="An unexpected error occurred while authentication",
-            headers={"X-Error": str(exception)},
+            headers={
+                "X-Error": "An unexpected error occurred while authentication"
+            },
         ) from exception

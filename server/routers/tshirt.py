@@ -33,27 +33,32 @@ async def register_tshirt(
     POST route for Tshirt Registration
     """
     try:
-        email = decode_jwt(token)["email"]
+        email = decode_jwt(token)["user_email"]
         user_id = database.query(Users.id).filter_by(email=email).first()
-        user_id = 1
         if size_requested.size not in valid_sizes:
             raise GenericError(
                 f"Invalid size requested: Size can only be {' '.join(valid_sizes)}"
             )
-        # if not user_id:
-        #     raise GenericError("User not found")
+        if not user_id:
+            raise GenericError("User not found")
+        registered_user = (
+            database.query(Tshirt).filter_by(user_id=user_id).first()
+        )
+        if registered_user:
+            raise GenericError("User already registered for t-shirt")
         tshirt = Tshirt(
             size=size_requested.size,
             user_id=user_id,
         )
         database.add(tshirt)
         database.commit()
-        database.close()
         return {"message": "Tshirt registered successfully"}
     except GenericError as exception:
         logger.error("Tshirt registration failed due to {exception}")
         raise HTTPException(
             status_code=500,
             detail="An unexpected error occurred while registering tshirt",
-            headers={"X-Error": str(exception)},
+            headers={
+                "X-Error": "An unexpected error occurred while registering tshirt"
+            },
         ) from exception
