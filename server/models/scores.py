@@ -20,13 +20,6 @@ class ClusterPointModel(BaseModel):
         description="Points for the cluster",
     )
 
-    class Config:
-        """
-        Pydantic ORM config
-        """
-
-        orm_mode = True
-
 
 class ScoreModel(BaseModel):
     """
