@@ -14,3 +14,13 @@ class TshirtRequestModel(BaseModel):
         title="Size",
         description="Size of the tshirt",
     )
+
+
+class TshirtResponseModel(BaseModel):
+    """Response model for Tshirt"""
+
+    message: str = Field(
+        ...,
+        title="Tshirt Registration Status",
+        description="Response message for registration status",
+    )

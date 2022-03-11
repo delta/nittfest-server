@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from config.database import get_database
 from config.logger import logger
-from server.models.tshirt import TshirtRequestModel
+from server.models.tshirt import TshirtRequestModel, TshirtResponseModel
 from server.models.errors import GenericError
 from server.schemas.tshirt import Tshirt
 from server.schemas.users import Users
@@ -23,12 +23,13 @@ router = APIRouter(
 @router.post(
     "/",
     dependencies=[Depends(get_database), Depends(JWTBearer())],
+    response_model=TshirtResponseModel,
 )
 async def register_tshirt(
     size_requested: TshirtRequestModel,
     token: str = Depends(JWTBearer()),
     database: Session = Depends(get_database),
-) -> None:
+) -> TshirtResponseModel:
     """
     POST route for Tshirt Registration
     """
@@ -52,7 +53,9 @@ async def register_tshirt(
         )
         database.add(tshirt)
         database.commit()
-        return {"message": "Tshirt registered successfully"}
+        return TshirtResponseModel(
+            message="Tshirt registration successfull"
+        )
     except GenericError as exception:
         logger.error("Tshirt registration failed due to {exception}")
         raise HTTPException(
