@@ -16,7 +16,6 @@ from tests.answers_test import post_answers
 from tests.department_test import get_departments
 from tests.event_test import get_events
 from tests.scores_test import get_scores
-from tests.tshirt_test import tshirt_registration
 from tests.preferences_test import (
     check_preferences_already_filled,
     post_preferences_another_fill,
@@ -77,13 +76,6 @@ def scores_test():
     get_scores(client)
 
 
-def tshirt_test():
-    """
-    method to execute tests on register_tshirt route
-    """
-    tshirt_registration(client)
-
-
 app.dependency_overrides[get_database] = get_test_database
 
 client = test()
@@ -94,4 +86,3 @@ answers_test()
 departments_test()
 events_test()
 scores_test()
-tshirt_test()
