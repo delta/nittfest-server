@@ -176,7 +176,9 @@ async def validate_guess(
         )[0]
         if not user_id:
             raise GenericError("User not found")
-        is_guess_valid = is_valid_word(word=unvalidated_guess.guess)
+        is_guess_valid = is_valid_word(
+            word=unvalidated_guess.guess.lower()
+        )
         if not is_guess_valid:
             raise GenericError("Invalid guess")
         answer = (
