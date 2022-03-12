@@ -16,6 +16,8 @@ def validate_guess_controller(
     """
     validated_guess: list = []
     correct_letters = 0
+    unvalidated_guess = unvalidated_guess.lower()
+    answer = answer.lower()
     for i in range(5):
         if unvalidated_guess[i] == answer[i]:
             validated_guess.append([unvalidated_guess[i], "G"])
@@ -35,4 +37,6 @@ def is_valid_word(word: str) -> bool:
     """
     Check if word is valid
     """
+    if len(word) != 5:
+        return False
     return word in valid_guesses
