@@ -3,6 +3,7 @@ Scores Router
 """
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from frozendict import frozendict
 
 from server.schemas.point import Point
 from server.schemas.department import Department
@@ -46,7 +47,9 @@ async def get_scores(
         for cluster in clusters:
             cluster_list.update({cluster.id: cluster.name})
         return get_all_scores(
-            dept_list=dept_list, cluster_list=cluster_list, points=points
+            dept_list=frozendict(dept_list),
+            cluster_list=frozendict(cluster_list),
+            points=tuple(points),
         )
     except GenericError as exception:
         logger.error(f"Fetching Events failed due to {exception}")

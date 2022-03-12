@@ -2,7 +2,9 @@
 Nerdle Guess Validation Controller
 """
 
+from functools import lru_cache
 from server.models.nerdle import WinningGuessModel
+from scripts.constants import valid_guesses
 
 
 def validate_guess_controller(
@@ -26,3 +28,11 @@ def validate_guess_controller(
     return WinningGuessModel(
         validated_guess=validated_guess, is_win=is_win
     )
+
+
+@lru_cache()
+def is_valid_word(word: str) -> bool:
+    """
+    Check if word is valid
+    """
+    return word in valid_guesses

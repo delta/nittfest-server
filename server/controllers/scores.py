@@ -1,14 +1,17 @@
 """
 Score Controller
 """
+from functools import lru_cache
+from frozendict import frozendict
 from server.models.scores import ClusterPointModel, ScoreModel
 from server.schemas.point import Point
 
 
+@lru_cache()
 def get_all_scores(
-    dept_list: dict,
-    cluster_list: dict,
-    points: list[Point],
+    dept_list: frozendict,
+    cluster_list: frozendict,
+    points: tuple[Point],
 ) -> list[ScoreModel]:
     """
     Fucntion to get all scores of all departments

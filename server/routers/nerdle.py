@@ -19,13 +19,35 @@ from server.models.nerdle import (
 from server.schemas.guesses import Guesses
 from server.schemas.nerdle import Nerdle
 from server.schemas.users import Users
-from server.controllers.nerdle import validate_guess_controller
+from server.controllers.nerdle import (
+    validate_guess_controller,
+    is_valid_word,
+)
+from scripts.constants import word_list
 
 router = APIRouter(
     prefix="/nerdle",
 )
 
-word_list = ["panda", "cycle"]
+
+def set_word_into_db(
+    user_id: int, database: Session = Depends(get_database)
+) -> None:
+    """
+    Set word into db
+    """
+    previous_word = (
+        database.query(Nerdle.current_word)
+        .filter(Nerdle.user_id == user_id)
+        .first()
+    )
+    word = random.choice(word_list)
+    while previous_word == word:
+        word = random.choice(word_list)
+    database.query(Nerdle).filter(Nerdle.user_id == user_id).update(
+        {"current_word": previous_word}
+    )
+    database.commit()
 
 
 @router.post(
@@ -33,7 +55,7 @@ word_list = ["panda", "cycle"]
     response_model=WordResponseModel,
     dependencies=[Depends(JWTBearer), Depends(get_database)],
 )
-async def get_word(
+async def set_word(
     token: str = Depends(JWTBearer()),
     database: Session = Depends(get_database),
 ) -> WordResponseModel:
@@ -64,17 +86,14 @@ async def get_word(
         if nerdle is None:
             nerdle = Nerdle(
                 user_id=user_id,
-                current_word="",
+                current_word=random.choice(word_list),
                 score=0,
                 streak=0,
             )
-        if nerdle.current_word == "":
-            generated_word = word_list[
-                random.randint(0, len(word_list) - 1)
-            ]
-            nerdle.current_word = generated_word
-        database.add(nerdle)
-        database.commit()
+            database.add(nerdle)
+            database.commit()
+        else:
+            set_word_into_db(user_id=user_id)
         return WordResponseModel(status="Successful")
     except Exception as exception:
         logger.error("Error in get_word: " + str(exception))
@@ -144,6 +163,9 @@ async def validate_guess(
         )
         if not user_id:
             raise GenericError("User not found")
+        is_guess_valid = is_valid_word(word=unvalidated_guess.guess)
+        if not is_guess_valid:
+            raise GenericError("Invalid guess")
         answer = (
             database.query(Nerdle.current_word)
             .filter(Nerdle.user_id == user_id)
