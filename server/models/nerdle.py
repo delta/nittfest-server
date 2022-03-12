@@ -71,3 +71,21 @@ class WinningGuessModel(BaseModel):
         title="Is Winning Guess?",
         description="Is the current guess right?",
     )
+
+
+class NerdleScoreResponseModel(BaseModel):
+    """
+    Nerdle Score Response Model
+    """
+
+    score: int = Field(
+        ...,
+        title="Nerdle Score",
+        description="Current Nerdle Score",
+    )
+
+    streak: int = Field(
+        ...,
+        title="Nerdle Streak",
+        description="Current Nerdle Streak",
+    )

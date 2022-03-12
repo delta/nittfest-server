@@ -15,6 +15,7 @@ from server.models.nerdle import (
     GuessesResponseModel,
     GuessValidationRequestModel,
     GuessValidationResponseModel,
+    NerdleScoreResponseModel,
 )
 from server.schemas.guesses import Guesses
 from server.schemas.nerdle import Nerdle
@@ -240,4 +241,48 @@ async def validate_guess(
             status_code=400,
             detail="Guess Validation Failed",
             headers={"X-Error": "Error Validating Guess"},
+        ) from exception
+
+
+@router.get(
+    "/get_score",
+    response_model=NerdleScoreResponseModel,
+    dependencies=[Depends(JWTBearer()), Depends(get_database)],
+)
+async def get_score(
+    token: str = Depends(JWTBearer()),
+    database: Session = Depends(get_database),
+) -> NerdleScoreResponseModel:
+    """
+    GET route for getting score
+    """
+    try:
+        email = decode_jwt(token)["user_email"]
+        user_id = (
+            database.query(Users.id).filter(Users.email == email).first()
+        )[0]
+        if not user_id:
+            raise GenericError("User not found")
+        nerdle = (
+            database.query(Nerdle)
+            .filter(Nerdle.user_id == user_id)
+            .first()
+        )
+        return NerdleScoreResponseModel(
+            score=nerdle.score,
+            streak=nerdle.streak,
+        )
+    except Exception as exception:
+        logger.error(f"Failed to get Score: {exception}")
+        raise HTTPException(
+            status_code=500,
+            detail="Getting Score failed.",
+            headers={"X-Error": "Error in getting score"},
+        ) from exception
+    except GenericError as exception:
+        logger.error(f"Failed to get Score: {exception}")
+        raise HTTPException(
+            status_code=400,
+            detail="Score Validation Failed",
+            headers={"X-Error": "Error Validating Score"},
         ) from exception
