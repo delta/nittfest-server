@@ -26,7 +26,7 @@ def validate_guess_controller(
             validated_guess.append([unvalidated_guess[i], "Y"])
         else:
             validated_guess.append([unvalidated_guess[i], "B"])
-        is_win = correct_letters == 5
+    is_win = correct_letters == 5
     return WinningGuessModel(
         validated_guess=validated_guess, is_win=is_win
     )
