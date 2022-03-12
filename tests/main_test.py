@@ -15,6 +15,7 @@ from server.main import app
 from tests.answers_test import post_answers
 from tests.department_test import get_departments
 from tests.event_test import get_events
+from tests.scores_test import get_scores
 from tests.preferences_test import (
     check_preferences_already_filled,
     post_preferences_another_fill,
@@ -68,6 +69,13 @@ def departments_test():
     get_departments(client)
 
 
+def scores_test():
+    """
+    method to execute tests on scores route
+    """
+    get_scores(client)
+
+
 app.dependency_overrides[get_database] = get_test_database
 
 client = test()
@@ -77,3 +85,4 @@ questions_test()
 answers_test()
 departments_test()
 events_test()
+scores_test()

@@ -6,18 +6,9 @@ from fastapi.testclient import TestClient
 ROUTE = "/department"
 res = {
     "departments": [
-        {
-            "name": "cse",
-            "description": "cse",
-        },
-        {
-            "name": "archi",
-            "description": "archi",
-        },
-        {
-            "name": "eee",
-            "description": "eee",
-        },
+        {"name": "MME", "description": "Gods"},
+        {"name": "EEE", "description": "some generic description"},
+        {"name": "ICE", "description": "some generic description"},
     ]
 }
 

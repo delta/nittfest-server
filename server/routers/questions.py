@@ -82,8 +82,10 @@ async def form_questions(
         )
         raise HTTPException(
             status_code=500,
-            detail=f"{exception}",
-            headers={"X-Error": str(exception)},
+            detail="An unexpected error occurred while retrieving form questions",
+            headers={
+                "X-Error": "An unexpected error occurred while retrieving form questions"
+            },
         ) from exception
 
 
@@ -146,5 +148,5 @@ async def form_questions_submit(
         raise HTTPException(
             status_code=500,
             detail="Form answers submission failed.",
-            headers={"X-Error": str(exception)},
+            headers={"X-Error": "Form answers submission failed"},
         ) from exception
