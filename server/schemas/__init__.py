@@ -11,6 +11,8 @@ from server.schemas.preferences import Preferences
 from server.schemas.questions import Answer, Questions
 from server.schemas.users import Users
 from server.schemas.tshirt import Tshirt
+from server.schemas.nerdle import Nerdle
+from server.schemas.guesses import Guesses
 
 schemas = [
     Users.metadata,
@@ -26,4 +28,6 @@ models = [
     Department.metadata,
     Point.metadata,
     Tshirt.metadata,
+    Nerdle.metadata,
+    Guesses.metadata,
 ]
