@@ -515,7 +515,6 @@ word_list = [
     "Chalk",
     "Humid",
     "Class",
-    "Gmeet",
     "Video",
     "Covid",
     "Crush",
