@@ -94,10 +94,17 @@ async def set_word(
             set_word_into_db(user_id=user_id, database=database)
         return WordResponseModel(status="Successful")
     except Exception as exception:
-        logger.error("Error in get_word: " + str(exception))
+        logger.error(f"Error in get_word: {exception}")
         raise HTTPException(
             status_code=500,
-            detail="Form answers submission failed.",
+            detail="Error Setting Word.",
+            headers={"X-Error": "Error Setting word"},
+        ) from exception
+    except GenericError as exception:
+        logger.error(f"Error in get_word: {exception}")
+        raise HTTPException(
+            status_code=400,
+            detail="Error setting word.",
             headers={"X-Error": "Error in getting word"},
         ) from exception
 
@@ -133,16 +140,23 @@ async def get_guesses(
             guesses=guesses,
         )
     except Exception as exception:
-        logger.error("Error in get_guesses: " + str(exception))
+        logger.error(f"Error in get_guesses: {exception}")
         raise HTTPException(
             status_code=500,
             detail="Getting Guesses failed.",
             headers={"X-Error": "Error in getting guesses"},
         ) from exception
+    except GenericError as exception:
+        logger.error(f"Failed to get Guesses: {exception}")
+        raise HTTPException(
+            status_code=400,
+            detail="Guess Validation Failed",
+            headers={"X-Error": "Error Validating Guess"},
+        ) from exception
 
 
 @router.post(
-    "/validate_guess",
+    "/validate_guess/",
     response_model=GuessValidationResponseModel,
     dependencies=[Depends(JWTBearer()), Depends(get_database)],
 )
@@ -154,63 +168,76 @@ async def validate_guess(
     """
     Route to Validate Guess
     """
-    # try:
-    email = decode_jwt(token)["user_email"]
-    user_id = (
-        database.query(Users.id).filter(Users.email == email).first()
-    )[0]
-    if not user_id:
-        raise GenericError("User not found")
-    is_guess_valid = is_valid_word(word=unvalidated_guess.guess)
-    if not is_guess_valid:
-        raise GenericError("Invalid guess")
-    answer = (
-        database.query(Nerdle.current_word)
-        .filter(Nerdle.user_id == user_id)
-        .first()[0]
-    )
-    validated_guess_response: WinningGuessModel = (
-        validate_guess_controller(
-            answer=answer, unvalidated_guess=unvalidated_guess.guess
-        )
-    )
-    guesses = (
-        database.query(Guesses).filter(Guesses.user_id == user_id).all()
-    )
-    if validated_guess_response.is_win:
-        nerdle = (
-            database.query(Nerdle)
+    try:
+        email = decode_jwt(token)["user_email"]
+        user_id = (
+            database.query(Users.id).filter(Users.email == email).first()
+        )[0]
+        if not user_id:
+            raise GenericError("User not found")
+        is_guess_valid = is_valid_word(word=unvalidated_guess.guess)
+        if not is_guess_valid:
+            raise GenericError("Invalid guess")
+        answer = (
+            database.query(Nerdle.current_word)
             .filter(Nerdle.user_id == user_id)
-            .first()
+            .first()[0]
         )
-        nerdle.score += 1
-        nerdle.streak += 1
-        database.query(Guesses).filter(Guesses.user_id == user_id).delete()
-        set_word_into_db(user_id=user_id, database=database)
-    elif len(guesses) == 5 and not validated_guess_response.is_win:
-        nerdle = (
-            database.query(Nerdle)
-            .filter(Nerdle.user_id == user_id)
-            .first()
+        validated_guess_response: WinningGuessModel = (
+            validate_guess_controller(
+                answer=answer, unvalidated_guess=unvalidated_guess.guess
+            )
         )
-        nerdle.streak = 0
-        database.query(Guesses).filter(Guesses.user_id == user_id).delete()
-        set_word_into_db(user_id=user_id, database=database)
-    else:
-        guess = Guesses(
-            guess=unvalidated_guess.guess,
-            user_id=user_id,
-            position=len(guesses) + 1,
+        guesses = (
+            database.query(Guesses)
+            .filter(Guesses.user_id == user_id)
+            .all()
         )
-        database.add(guess)
-    database.commit()
-    return GuessValidationResponseModel(
-        validated_guess=validated_guess_response.validated_guess
-    )
-    # except Exception as exception:
-    #     logger.error(f"Failed to Validate Guess: {exception}")
-    #     raise HTTPException(
-    #         status_code=500,
-    #         detail="Guess Validation Failed",
-    #         headers={"X-Error": "Error Validating Guess"},
-    #     ) from exception
+        if validated_guess_response.is_win:
+            nerdle = (
+                database.query(Nerdle)
+                .filter(Nerdle.user_id == user_id)
+                .first()
+            )
+            nerdle.score += 1
+            nerdle.streak += 1
+            database.query(Guesses).filter(
+                Guesses.user_id == user_id
+            ).delete()
+            set_word_into_db(user_id=user_id, database=database)
+        elif len(guesses) == 5 and not validated_guess_response.is_win:
+            nerdle = (
+                database.query(Nerdle)
+                .filter(Nerdle.user_id == user_id)
+                .first()
+            )
+            nerdle.streak = 0
+            database.query(Guesses).filter(
+                Guesses.user_id == user_id
+            ).delete()
+            set_word_into_db(user_id=user_id, database=database)
+        else:
+            guess = Guesses(
+                guess=unvalidated_guess.guess,
+                user_id=user_id,
+                position=len(guesses) + 1,
+            )
+            database.add(guess)
+        database.commit()
+        return GuessValidationResponseModel(
+            validated_guess=validated_guess_response.validated_guess
+        )
+    except Exception as exception:
+        logger.error(f"Failed to Validate Guess: {exception}")
+        raise HTTPException(
+            status_code=500,
+            detail="Guess Validation Failed",
+            headers={"X-Error": "Error Validating Guess"},
+        ) from exception
+    except GenericError as exception:
+        logger.error(f"Failed to Validate Guess: {exception}")
+        raise HTTPException(
+            status_code=400,
+            detail="Guess Validation Failed",
+            headers={"X-Error": "Error Validating Guess"},
+        ) from exception
