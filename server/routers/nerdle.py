@@ -157,7 +157,7 @@ async def get_guesses(
 
 
 @router.post(
-    "/validate_guess/",
+    "/validate_guess",
     response_model=GuessValidationResponseModel,
     dependencies=[Depends(JWTBearer()), Depends(get_database)],
 )
@@ -220,9 +220,15 @@ async def validate_guess(
             ).delete()
             set_word_into_db(user_id=user_id, database=database)
         else:
+            validation = []
+            for letter in validated_guess_response.validated_guess:
+                validation.append(letter[1])
+            validation = "".join(validation)
+            print(validation)
             guess = Guesses(
                 guess=unvalidated_guess.guess,
                 user_id=user_id,
+                validation=validation,
                 position=len(guesses) + 1,
             )
             database.add(guess)
