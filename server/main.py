@@ -12,7 +12,14 @@ from config.settings import settings
 from server.routers import department, event
 
 if "pytest" in sys.modules:
-    from server.routers import auth, preferences, questions, tshirt, scores
+    from server.routers import (
+        auth,
+        preferences,
+        questions,
+        tshirt,
+        scores,
+        nerdle,
+    )
 else:
     from server.routers import (
         admin,
@@ -22,6 +29,7 @@ else:
         seeds,
         scores,
         tshirt,
+        nerdle,
     )
 
 app = FastAPI()
@@ -33,6 +41,7 @@ app.include_router(department.router)
 app.include_router(event.router)
 app.include_router(tshirt.router)
 app.include_router(scores.router)
+app.include_router(nerdle.router)
 origins = []
 
 if "pytest" not in sys.modules:

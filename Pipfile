@@ -32,6 +32,7 @@ razorpay = "*"
 pyjwt = "==2.3.0"
 pytest = "==7.0.1"
 pytest-asyncio = "*"
+frozendict = "==2.3.0"
 
 [requires]
 python_version = "3.9"
