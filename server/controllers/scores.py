@@ -1,42 +1,61 @@
 """
 Score Controller
 """
+from functools import lru_cache
+
 from server.models.scores import ClusterPointModel, ScoreModel
-from server.schemas.point import Point
+from server.schemas.cluster import Cluster
+from server.schemas.department import Department
 
 
+@lru_cache()
 def get_all_scores(
-    dept_list: dict,
-    cluster_list: dict,
-    points: list[Point],
+    clusters: tuple[Cluster], departments: tuple[Department], points: tuple
 ) -> list[ScoreModel]:
     """
-    Fucntion to get all scores of all departments
+    Function to get all scores of all departments
     """
-    point_list: dict = {}
+    dept_list: dict = {}
+    cluster_point_list: dict = {}
+
+    for dept in departments:
+        cluster_point_list1: dict = {}
+        for cluster in clusters:
+            cluster_point_list1.update(
+                {
+                    cluster.id: ClusterPointModel(
+                        cluster=cluster.name, points=0
+                    )
+                }
+            )
+        dept_list.update({dept.id: cluster_point_list1})
+
     total_list: dict = {}
     score_response: list[ScoreModel] = []
 
     for point in points:
-        cluster_id: str = cluster_list.get(point[1].cluster_id)
-        dept_id: str = dept_list.get(point[0].department_id)
-        total: int = total_list.get(dept_id, 0)
+        cluster_id: int = point[1].cluster_id
+        total: int = total_list.get(point[0].department_id, 0)
         total += point[0].point
-        total_list.update({dept_id: total})
-        res = point_list.get(dept_id, {})
-        cluster_points: ClusterPointModel = res.get(
-            cluster_id, ClusterPointModel(cluster=cluster_id, points=0)
-        )
-        cluster_points.points += point[0].point
-        res.update({cluster_id: cluster_points})
-        point_list.update({dept_id: res})
+        total_list.update({point[0].department_id: total})
+        cluster_points = dept_list.get(point[0].department_id)
 
-    for dept, cluster_points in point_list.items():
+        if cluster_points is not None:
+            points_of_cluster: ClusterPointModel = cluster_points.get(
+                cluster_id
+            )
+            points_of_cluster.points += point[0].point
+            cluster_points.update({cluster_id: points_of_cluster})
+            dept_list.update({point[0].department_id: cluster_points})
+
+    for dept in departments:
         score_response.append(
             ScoreModel(
-                department=dept,
-                total_points=total_list.get(dept, 0),
-                cluster_points=list(cluster_points.values()),
+                department=dept.name,
+                total_points=total_list.get(dept.id, 0),
+                cluster_points=list(
+                    dept_list.get(dept.id, cluster_point_list).values()
+                ),
             )
         )
 

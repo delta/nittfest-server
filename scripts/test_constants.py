@@ -4,7 +4,6 @@ test constants
 
 from datetime import datetime
 
-
 test_user = {
     "id": 1,
     "name": "Muhesh",
@@ -62,10 +61,12 @@ test_departments = [
 
 test_clusters = [
     {
+        "id": 1,
         "name": "Arts",
         "image_link": "http://genericlink.com/route",
     },
     {
+        "id": 2,
         "name": "Gaming",
         "image_link": "http://genericlink.com/route",
     },
@@ -73,6 +74,7 @@ test_clusters = [
 
 test_events = [
     {
+        "id": 1,
         "name": "Art Event 1",
         "description": "Art Something",
         "cluster_id": 1,
@@ -86,6 +88,7 @@ test_events = [
         "is_event_completed": False,
     },
     {
+        "id": 2,
         "name": "Art Event 2",
         "description": "Art Something",
         "cluster_id": 1,
@@ -99,6 +102,7 @@ test_events = [
         "is_event_completed": False,
     },
     {
+        "id": 3,
         "name": "Gaming Event 1",
         "description": "Game Something",
         "cluster_id": 2,
@@ -112,6 +116,7 @@ test_events = [
         "is_event_completed": False,
     },
     {
+        "id": 4,
         "name": "Gaming Event 2",
         "description": "Game Something",
         "cluster_id": 2,

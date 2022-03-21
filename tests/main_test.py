@@ -13,14 +13,15 @@ from config.database import (
 from scripts.seeder.seed_tests import seed_testdb
 from server.main import app
 from tests.answers_test import post_answers
+from tests.dashboard_test import get_dashboard
 from tests.department_test import get_departments
 from tests.event_test import get_events
-from tests.scores_test import get_scores
 from tests.preferences_test import (
     check_preferences_already_filled,
     post_preferences_another_fill,
 )
 from tests.questions_test import get_questions
+from tests.scores_test import get_scores
 
 Base.metadata.create_all(bind=test_engine)
 
@@ -76,6 +77,13 @@ def scores_test():
     get_scores(client)
 
 
+def dashboard_test():
+    """
+    method to execute tests on dashboard route
+    """
+    get_dashboard(client)
+
+
 app.dependency_overrides[get_database] = get_test_database
 
 client = test()
@@ -86,3 +94,4 @@ answers_test()
 departments_test()
 events_test()
 scores_test()
+dashboard_test()

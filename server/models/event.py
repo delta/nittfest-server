@@ -3,6 +3,7 @@ Event Model
 """
 
 from datetime import datetime
+
 from pydantic import BaseModel
 from pydantic.fields import Field
 

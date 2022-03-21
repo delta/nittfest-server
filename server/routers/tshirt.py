@@ -7,11 +7,11 @@ from sqlalchemy.orm import Session
 
 from config.database import get_database
 from config.logger import logger
-from server.models.tshirt import TshirtRequestModel, TshirtResponseModel
+from server.controllers.auth import JWTBearer, decode_jwt
 from server.models.errors import GenericError
+from server.models.tshirt import TshirtRequestModel, TshirtResponseModel
 from server.schemas.tshirt import Tshirt
 from server.schemas.users import Users
-from server.controllers.auth import JWTBearer, decode_jwt
 
 valid_sizes = ["S", "M", "L", "XL", "XXL"]
 

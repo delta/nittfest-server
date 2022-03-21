@@ -16,7 +16,8 @@ class Cluster(Base):
     name = Column(String(50))
     image_link = Column(String(255))
 
-    def __init__(self, name, image_link):
+    def __init__(self, key, name, image_link):
+        self.id = key
         self.name = name
         self.image_link = image_link
 
