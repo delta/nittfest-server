@@ -16,7 +16,9 @@ class Users(Base):
     email = Column(String(255))
     mobile_number = Column(String(255))
     gender = Column(String(255))
-    department_id = Column(Integer, ForeignKey("departments.id"))
+    department_id = Column(
+        Integer, ForeignKey("departments.id"), nullable=True
+    )
     fcm_token = Column(String(255))
 
     def __init__(

@@ -2,30 +2,40 @@
 Event controller
 """
 
+from functools import lru_cache
 from typing import List
 
 from server.models.event import ClusterModel, EventModel, PointModel
 from server.schemas.cluster import Cluster
+from server.schemas.department import Department
 from server.schemas.event import Event
+from server.schemas.point import Point
 
 
+@lru_cache()
 def get_events(
-    events: list[Event], clusters: list[Cluster], points: list
+    events: tuple[Event],
+    clusters: tuple[Cluster],
+    points: tuple[Point],
+    departments: tuple[Department],
 ) -> list[ClusterModel]:
     """
     Util function to make response
     """
     points_list = {}
+    department_list = {}
+    for department in departments:
+        department_list.update({department.id: department.name})
     for point in points:
-        value = points_list.get(point[0].event_id, [])
+        value = points_list.get(point.event_id, [])
         value.append(
             PointModel(
-                point=point[0].point,
-                position=point[0].position,
-                department=point[1].name,
+                point=point.point,
+                position=point.position,
+                department=department_list.get(point.department_id, "N/A"),
             )
         )
-        points_list.update({point[0].event_id: value})
+        points_list.update({point.event_id: value})
     event_list = {}
     for event in events:
         value = event_list.get(event.cluster_id, [])

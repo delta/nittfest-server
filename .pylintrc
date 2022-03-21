@@ -3,6 +3,7 @@ init-hook="from pylint.config import find_pylintrc; import os, sys; sys.path.app
 ignore=.venv
 min-public-methods=0
 extension-pkg-whitelist=pydantic
+good-names=id,i
 max-args = 15
 [DESIGN]
 max-attributes=12

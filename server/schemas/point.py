@@ -16,7 +16,7 @@ class Point(Base):
     position = Column(Integer, nullable=False)
     event_id = Column(Integer, ForeignKey("events.id"), nullable=False)
     department_id = Column(
-        Integer, ForeignKey("departments.id"), nullable=False
+        Integer, ForeignKey("departments.id"), nullable=True
     )
 
     def __init__(self, point, position, event_id, department_id):
