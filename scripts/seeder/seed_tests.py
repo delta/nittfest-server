@@ -36,6 +36,7 @@ def seed_testdb(database: Session):
             for department in test_departments:
                 database.add(
                     Department(
+                        key=department["id"],
                         name=department["name"],
                         description=department["description"],
                     )

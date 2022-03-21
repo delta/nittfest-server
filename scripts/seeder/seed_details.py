@@ -25,6 +25,7 @@ async def seed_maindb(database: Session):
             for department in test_departments:
                 database.add(
                     Department(
+                        id=department["id"],
                         name=department["name"],
                         description=department["description"],
                     )
@@ -37,7 +38,7 @@ async def seed_maindb(database: Session):
                     email=test_user["email"],
                     mobile_number=test_user["mobile_number"],
                     gender=test_user["gender"],
-                    department_id=None,
+                    department_id=test_user["department_id"],
                     fcm_token=None,
                 )
             )
@@ -78,7 +79,7 @@ async def seed_maindb(database: Session):
                         point=point["point"],
                         position=point["position"],
                         event_id=point["event_id"],
-                        department_id=None,
+                        department_id=point["department_id"],
                     )
                 )
             database.commit()

@@ -15,7 +15,8 @@ class Department(Base):
     name = Column(String(100))
     description = Column(String(3000))
 
-    def __init__(self, name, description):
+    def __init__(self, key, name, description):
+        self.id = key
         self.name = name
         self.description = description
 
