@@ -12,15 +12,15 @@ from config.settings import settings
 from server.routers import department, event
 
 if "pytest" in sys.modules:
-    from server.routers import auth, preferences, questions, tshirt, scores
+    from server.routers import auth, preferences, questions, scores, tshirt
 else:
     from server.routers import (
         admin,
         auth,
         preferences,
         questions,
-        seeds,
         scores,
+        seeds,
         tshirt,
     )
 

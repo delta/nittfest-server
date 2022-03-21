@@ -1,7 +1,7 @@
 """
 T-shirt Registration Schema
 """
-from sqlalchemy import Column, ForeignKey, Integer, Enum
+from sqlalchemy import Column, Enum, ForeignKey, Integer
 
 from config.database import Base
 

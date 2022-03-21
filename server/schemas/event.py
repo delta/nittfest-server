@@ -6,10 +6,10 @@ Schema for event
 from sqlalchemy import (
     Boolean,
     Column,
+    DateTime,
     ForeignKey,
     Integer,
     String,
-    DateTime,
 )
 
 from config.database import Base
@@ -34,6 +34,7 @@ class Event(Base):
 
     def __init__(
         self,
+        key,
         name,
         description,
         cluster_id,
@@ -46,6 +47,7 @@ class Event(Base):
         is_reg_completed,
         is_event_completed,
     ):
+        self.id = key
         self.name = name
         self.description = description
         self.cluster_id = cluster_id

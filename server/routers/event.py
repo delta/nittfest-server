@@ -30,15 +30,21 @@ async def get_event(
     GET route for events
     """
     try:
-        events = database.query(Event).order_by(Event.cluster_id).all()
-        cluster = database.query(Cluster).order_by(Cluster.id.asc()).all()
-        points = (
-            database.query(Point, Department)
-            .order_by(Point.position.asc())
-            .join(Department, Department.id == Point.department_id)
-            .all()
+        events = tuple(
+            database.query(Event).order_by(Event.cluster_id).all()
         )
-        return get_events(events=events, clusters=cluster, points=points)
+        cluster = tuple(
+            database.query(Cluster).order_by(Cluster.id.asc()).all()
+        )
+        points = tuple(database.query(Point).all())
+        departments = tuple(database.query(Department).all())
+
+        return get_events(
+            events=events,
+            clusters=cluster,
+            points=points,
+            departments=departments,
+        )
 
     except GenericError as exception:
         logger.error(f"failed due to {exception}")
