@@ -3,7 +3,14 @@ Schema for event
 """
 
 
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import (
+    Boolean,
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    DateTime,
+)
 
 from config.database import Base
 
@@ -20,9 +27,8 @@ class Event(Base):
     form_link = Column(String(255))
     event_link = Column(String(255))
     image_link = Column(String(255))
-    start_time = Column(String(25))
-    end_time = Column(String(25))
-    date = Column(String(25))
+    start_time = Column(DateTime)
+    end_time = Column(DateTime)
     is_reg_completed = Column(Boolean, default=False)
     is_event_completed = Column(Boolean, default=False)
 
@@ -37,7 +43,6 @@ class Event(Base):
         image_link,
         start_time,
         end_time,
-        date,
         is_reg_completed,
         is_event_completed,
     ):
@@ -50,7 +55,6 @@ class Event(Base):
         self.image_link = image_link
         self.start_time = start_time
         self.end_time = end_time
-        self.date = date
         self.is_reg_completed = is_reg_completed
         self.is_event_completed = is_event_completed
 
@@ -66,5 +70,4 @@ class Event(Base):
         image_link: '{self.image_link}',
         start_time: '{self.start_time}',
         end_time: '{self.end_time}',
-        date: '{self.date}',
         is_event_completed '{self.is_event_completed}',>"""

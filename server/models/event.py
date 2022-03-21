@@ -2,6 +2,7 @@
 Event Model
 """
 
+from datetime import datetime
 from pydantic import BaseModel
 from pydantic.fields import Field
 
@@ -47,13 +48,12 @@ class EventModel(BaseModel):
     image_link: str = Field(
         ..., title="Image Link", description="logo of the event"
     )
-    start_time: str = Field(
+    start_time: datetime = Field(
         ..., title="Start Time", description="Start Time of the event"
     )
-    end_time: str = Field(
+    end_time: datetime = Field(
         ..., title="End Time", description="End Time of the event"
     )
-    date: str = Field(..., title="Date", description="Event Date")
     is_reg_completed: bool = Field(
         ..., title="is Filled", description="Checks registration deadline"
     )

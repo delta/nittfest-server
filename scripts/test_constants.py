@@ -2,6 +2,9 @@
 test constants
 """
 
+from datetime import datetime
+
+
 test_user = {
     "id": 1,
     "name": "Muhesh",
@@ -9,6 +12,7 @@ test_user = {
     "mobile_number": "9790546296",
     "gender": "MALE",
     "department_id": 2,
+    "fcm_token": "123",
 }
 
 test_domains = [
@@ -51,9 +55,9 @@ test_answers = [
 ]
 
 test_departments = [
-    {"name": "MME", "description": "Gods"},
-    {"name": "EEE", "description": "some generic description"},
-    {"name": "ICE", "description": "some generic description"},
+    {"id": 1, "name": "MME", "description": "Gods"},
+    {"id": 2, "name": "EEE", "description": "some generic description"},
+    {"id": 3, "name": "ICE", "description": "some generic description"},
 ]
 
 test_clusters = [
@@ -76,9 +80,8 @@ test_events = [
         "form_link": "http://genericlink.com/route",
         "event_link": "http://genericlink.com/route",
         "image_link": "http://genericlink.com/route",
-        "start_time": "start time",
-        "end_time": "end time",
-        "date": "date",
+        "start_time": datetime(2012, 3, 3, 10, 10, 10),
+        "end_time": datetime(2012, 3, 3, 10, 10, 10),
         "is_reg_completed": False,
         "is_event_completed": False,
     },
@@ -90,9 +93,8 @@ test_events = [
         "form_link": "http://genericlink.com/route",
         "event_link": "http://genericlink.com/route",
         "image_link": "http://genericlink.com/route",
-        "start_time": "start time",
-        "end_time": "end time",
-        "date": "date",
+        "start_time": datetime(2012, 3, 3, 10, 10, 10),
+        "end_time": datetime(2012, 3, 3, 10, 10, 10),
         "is_reg_completed": False,
         "is_event_completed": False,
     },
@@ -104,9 +106,8 @@ test_events = [
         "form_link": "http://genericlink.com/route",
         "event_link": "http://genericlink.com/route",
         "image_link": "http://genericlink.com/route",
-        "start_time": "start time",
-        "end_time": "end time",
-        "date": "date",
+        "start_time": datetime(2012, 3, 3, 10, 10, 10),
+        "end_time": datetime(2012, 3, 3, 10, 10, 10),
         "is_reg_completed": False,
         "is_event_completed": False,
     },
@@ -118,9 +119,8 @@ test_events = [
         "form_link": "http://genericlink.com/route",
         "event_link": "http://genericlink.com/route",
         "image_link": "http://genericlink.com/route",
-        "start_time": "start time",
-        "end_time": "end time",
-        "date": "date",
+        "start_time": datetime(2012, 3, 3, 10, 10, 10),
+        "end_time": datetime(2012, 3, 3, 10, 10, 10),
         "is_reg_completed": False,
         "is_event_completed": False,
     },

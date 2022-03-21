@@ -48,6 +48,7 @@ def seed_testdb(database: Session):
                     mobile_number=test_user["mobile_number"],
                     gender=test_user["gender"],
                     department_id=test_user["department_id"],
+                    fcm_token=test_user["fcm_token"],
                 )
             )
         if database.query(Preferences).count() == 0:
@@ -109,7 +110,6 @@ def seed_testdb(database: Session):
                         event_link=event["event_link"],
                         start_time=event["start_time"],
                         end_time=event["end_time"],
-                        date=event["date"],
                         is_reg_completed=event["is_reg_completed"],
                         is_event_completed=event["is_event_completed"],
                     )

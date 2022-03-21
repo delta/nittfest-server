@@ -39,7 +39,6 @@ def get_events(
                 image_link=event.image_link,
                 start_time=event.start_time,
                 end_time=event.end_time,
-                date=event.date,
                 is_reg_completed=event.is_reg_completed,
                 is_event_completed=event.is_event_completed,
                 event_link=event.event_link,

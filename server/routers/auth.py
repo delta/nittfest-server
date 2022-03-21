@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from config.database import get_database
 from config.logger import logger
 from config.settings import settings
-from server.controllers.auth import sign_jwt
+from server.controllers.auth import get_department_id, sign_jwt
 from server.schemas.users import Users
 
 router = APIRouter(
@@ -55,7 +55,8 @@ async def fetch_user_details(
                 email=userdetails["email"],
                 mobile_number=userdetails["phoneNumber"],
                 gender=userdetails["gender"],
-                department_id=userdetails["deparment_id"],
+                department_id=get_department_id(userdetails["email"]),
+                fcm_token="123",
             )
             session.add(new_user)
             session.commit()

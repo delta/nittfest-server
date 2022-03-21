@@ -73,6 +73,13 @@ def verify_jwt(jwtoken: str) -> bool:
     return is_token_valid
 
 
+def get_department_id(email: str) -> int:
+    """
+    get the department id of the current User
+    """
+    return int(email[1:3])
+
+
 class JWTBearer(HTTPBearer):
     """
     JWT Bearer Authentication
