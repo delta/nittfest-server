@@ -3,11 +3,11 @@ logger config
 """
 import os
 
+import sys
+
 from loguru import logger
 
 from config.settings import settings
-
-import sys
 
 logs_dir = os.path.join(os.path.dirname(__file__), "../logs")
 

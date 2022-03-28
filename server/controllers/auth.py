@@ -7,6 +7,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from config.logger import logger
 from config.settings import settings
+from server.models.errors import GenericError
 
 jwt_secret = settings.jwt_secret
 jwt_algo = settings.jwt_algo
@@ -119,3 +120,13 @@ class JWTBearer(HTTPBearer):
             raise HTTPException(
                 status_code=403, detail="Invalid authorization code."
             ) from exception
+
+
+def test_admin(token: str):
+    """
+    Test if the user is an admin
+    """
+    email = decode_jwt(token)["user_email"]
+    is_admin = bool(email in settings.admin)
+    if not is_admin:
+        raise GenericError("Not Admin")

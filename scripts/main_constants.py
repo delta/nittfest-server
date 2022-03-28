@@ -65,7 +65,7 @@ events = [
     },
     {
         "id": 2,
-        "name": "Latern Designing",
+        "name": "Lantern Designing",
         "description": "Lantern designing",
         "cluster_id": 1,
         "form_link": "http://genericlink.com/route",

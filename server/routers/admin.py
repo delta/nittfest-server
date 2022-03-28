@@ -33,7 +33,7 @@ async def download_preferences(
     """
     try:
         email = decode_jwt(token)["user_email"]
-        is_admin = bool(email == settings.admin)
+        is_admin = bool(email in settings.admin)
         if not is_admin:
             raise GenericError("Not Admin")
         filepath = await generate_preferences()
@@ -59,7 +59,7 @@ async def download_responses(
     """
     try:
         email = decode_jwt(token)["user_email"]
-        is_admin = bool(email == settings.admin)
+        is_admin = bool(email in settings.admin)
         if not is_admin:
             raise GenericError("Not Admin")
         filepath = await generate_forms_responses(
