@@ -5,6 +5,8 @@ Event controller
 from functools import lru_cache
 from typing import List
 
+from sqlalchemy.orm import Session
+from server.models.errors import GenericError
 from server.models.event import ClusterModel, EventModel, PointModel
 from server.schemas.cluster import Cluster
 from server.schemas.department import Department
@@ -63,3 +65,40 @@ def get_events(
             )
         )
     return response
+
+
+def update_events(events_list: list[EventModel], database: Session):
+    for events in events_list:
+        Event_data = (
+            database.query(Event).filter_by(name=events.name).first()
+        )
+        if not Event_data:
+            raise GenericError("Event Does not exist")
+
+        Point_list = (
+            database.query(Point).filter_by(event_id=Event_data.id).all()
+        )
+
+        for i in range(len(events.points)):
+            Point_list[i].point = events.points[i].point
+            Point_list[i].position = events.points[i].position
+            DepartmentId = (
+                database.query(Department)
+                .filter_by(name=events.points[i].department)
+                .first()
+                .id
+            )
+            if DepartmentId == None:
+                raise GenericError("Invalid Department")
+            Point_list[i].department_id = DepartmentId
+
+        Event_data.description = events.description
+        Event_data.rules = events.rules
+        Event_data.form_link = events.form_link
+        Event_data.event_link = events.event_link
+        Event_data.image_link = events.image_link
+        Event_data.start_time = events.start_time
+        Event_data.end_time = events.end_time
+        Event_data.is_reg_completed = events.is_reg_completed
+        Event_data.is_event_completed = events.is_event_completed
+        database.commit()

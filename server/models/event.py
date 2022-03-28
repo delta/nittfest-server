@@ -79,3 +79,13 @@ class ClusterModel(BaseModel):
         title="events",
         description="List of events under this cluster",
     )
+
+
+class EventResponseModel(BaseModel):
+    """Response model for Updating Events"""
+
+    message: str = Field(
+        ...,
+        title="Update Status",
+        description="Response message for Updation status",
+    )

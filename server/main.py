@@ -33,7 +33,7 @@ app.include_router(department.router)
 app.include_router(event.router)
 app.include_router(tshirt.router)
 app.include_router(scores.router)
-origins = []
+origins = ["*"]
 
 if "pytest" not in sys.modules:
     app.include_router(seeds.router)
