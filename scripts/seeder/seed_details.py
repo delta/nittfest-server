@@ -25,7 +25,7 @@ async def seed_maindb(database: Session):
             for department in test_departments:
                 database.add(
                     Department(
-                        id=department["id"],
+                        key=department["id"],
                         name=department["name"],
                         description=department["description"],
                     )
