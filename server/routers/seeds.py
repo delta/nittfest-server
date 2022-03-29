@@ -8,7 +8,6 @@ from sqlalchemy.orm.session import Session
 from scripts.seeder.seed_details import seed_maindb
 from config.database import SessionLocal
 
-
 router = APIRouter()
 
 
