@@ -101,7 +101,7 @@ def update_events(client: TestClient):
     """
     update list of events
     """
-    jwt_test = settings.test_jwt
+    jwt_test = settings.event_test_jwt
     header = {"Authorization": f"Bearer {jwt_test}"}
     body = [
         {

@@ -31,9 +31,11 @@ class Settings(BaseSettings):
     mailgun_domain: str = os.getenv("MAILGUN_DOMAIN")
     mailgun_email: str = os.getenv("MAILGUN_EMAIL")
     core_mail: str = os.getenv("CORE_EMAIL")
-    admin: str = os.getenv("ADMIN")
+    admin_roll: str = os.getenv("ADMIN_ROLL")
+    admin_password: str = os.getenv("ADMIN_PASSWORD")
     test_db: str = os.getenv("TEST_DATABASE")
     test_jwt: str = os.getenv("TEST_JWT")
+    event_test_jwt: str = os.getenv("EVENT_TEST_JWT")
 
     sqlalchemy_database_url: str = (
         f"mysql+pymysql://{mysql_user}:"

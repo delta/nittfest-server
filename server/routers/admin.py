@@ -12,8 +12,16 @@ from scripts.parser.parser import (
     generate_forms_responses,
     generate_preferences,
 )
-from server.controllers.auth import JWTBearer, decode_jwt
-from server.models.admin import DownloadFormResponsesRequestModel
+from server.controllers.auth import (
+    JWTBearer,
+    decode_jwt,
+    sign_jwt_auth,
+)
+from server.models.admin import (
+    AdminResponseModel,
+    DownloadFormResponsesRequestModel,
+    LoginRequestModel,
+)
 from server.models.errors import GenericError
 
 router = APIRouter(
@@ -32,14 +40,18 @@ async def download_preferences(
     Admin download preferences
     """
     try:
-        email = decode_jwt(token)["user_email"]
-        is_admin = bool(email in settings.admin)
+        roll = decode_jwt(token)["roll_number"]
+        password = decode_jwt(token)["password"]
+        is_admin = bool(
+            roll == settings.admin_roll
+            and password == settings.admin_password
+        )
         if not is_admin:
             raise GenericError("Not Admin")
         filepath = await generate_preferences()
         return FileResponse(filepath)
     except GenericError as exception:
-        logger.error(f"{email} attempted to download responses")
+        logger.error(f"{roll}@nitt.edu attempted to download responses")
         raise HTTPException(
             status_code=400,
             detail=f"{exception}",
@@ -58,8 +70,12 @@ async def download_responses(
     Admin download form responses
     """
     try:
-        email = decode_jwt(token)["user_email"]
-        is_admin = bool(email in settings.admin)
+        roll = decode_jwt(token)["roll_number"]
+        password = decode_jwt(token)["password"]
+        is_admin = bool(
+            roll == settings.admin_roll
+            and password == settings.admin_password
+        )
         if not is_admin:
             raise GenericError("Not Admin")
         filepath = await generate_forms_responses(
@@ -67,8 +83,27 @@ async def download_responses(
         )
         return FileResponse(filepath)
     except GenericError as exception:
-        logger.error(f"{email} attempted to download responses")
+        logger.error(f"{roll} attempted to download responses")
         raise HTTPException(
             status_code=400,
             detail=f"{exception}",
         ) from exception
+
+
+@router.post("/")
+def event_jwt(response: LoginRequestModel):
+    """
+    Admin login for events
+    """
+    if (
+        response.roll_number == settings.admin_roll
+        and response.password == settings.admin_password
+    ):
+        jwt_res = sign_jwt_auth(
+            roll=response.roll_number, password=response.password
+        )
+        print(jwt_res)
+        return AdminResponseModel(
+            isAuthorized=True, jwt_token=jwt_res["jwt_token"]
+        )
+    return AdminResponseModel(isAuthorized=False, jwt_token="")
