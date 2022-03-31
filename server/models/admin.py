@@ -56,3 +56,15 @@ class AdminResponseModel(BaseModel):
         title="JWT Token",
         description="JWT Token to be sent to user",
     )
+
+
+class AuthResponseModel(BaseModel):
+    """
+    Response model for Authentication
+    """
+
+    isAuthorized: bool = Field(
+        ...,
+        title="Check Authentication",
+        description="Authentication Status",
+    )

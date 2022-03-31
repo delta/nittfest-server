@@ -8,7 +8,11 @@ from sqlalchemy.orm import Session
 from config.database import get_database
 from config.logger import logger
 
-from server.controllers.event import get_events, update_events
+from server.controllers.event import (
+    get_events,
+    update_events,
+    update_points,
+)
 from server.models.errors import GenericError
 from server.models.event import ClusterModel, EventResponseModel
 from server.schemas.cluster import Cluster
@@ -57,10 +61,10 @@ async def get_event(
 
 
 @router.post(
-    "/",
+    "/update",
     dependencies=[Depends(get_database), Depends(JWTBearer())],
 )
-async def update(
+async def update_event(
     responses: ClusterModel,
     database: Session = Depends(get_database),
     token: str = Depends(JWTBearer()),
@@ -70,7 +74,8 @@ async def update(
     """
     try:
         test_admin(token=token)
-        update_events(events_list=responses.events, database=database)
+        update_events(events=responses.events[0], database=database)
+        update_points(events=responses.events[0], database=database)
         return EventResponseModel(message="Events Updated Succesfully")
     except GenericError as exception:
         logger.error(f"failed due to {exception}")
