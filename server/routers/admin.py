@@ -6,7 +6,6 @@ from fastapi.exceptions import HTTPException
 from fastapi.params import Depends
 from starlette.responses import FileResponse
 
-from config.logger import logger
 from config.settings import settings
 from scripts.parser.parser import (
     generate_forms_responses,
@@ -14,7 +13,6 @@ from scripts.parser.parser import (
 )
 from server.controllers.auth import (
     JWTBearer,
-    decode_jwt,
     sign_jwt_auth,
     test_admin,
 )

@@ -98,7 +98,7 @@ def update_points(events: EventModel, database: Session):
 
     if len(events.points) != len(point_list):
         raise GenericError("Number of points does not match")
-        
+
     for index, item in enumerate(point_list):
         item.point = events.points[index].point
         item.position = events.points[index].position
