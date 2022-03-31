@@ -6,14 +6,21 @@ from fastapi.exceptions import HTTPException
 from fastapi.params import Depends
 from starlette.responses import FileResponse
 
-from config.logger import logger
 from config.settings import settings
 from scripts.parser.parser import (
     generate_forms_responses,
     generate_preferences,
 )
-from server.controllers.auth import JWTBearer, decode_jwt
-from server.models.admin import DownloadFormResponsesRequestModel
+from server.controllers.auth import (
+    JWTBearer,
+    sign_jwt_auth,
+    test_admin,
+)
+from server.models.admin import (
+    AdminResponseModel,
+    DownloadFormResponsesRequestModel,
+    LoginRequestModel,
+)
 from server.models.errors import GenericError
 
 router = APIRouter(
@@ -32,14 +39,10 @@ async def download_preferences(
     Admin download preferences
     """
     try:
-        email = decode_jwt(token)["user_email"]
-        is_admin = bool(email == settings.admin)
-        if not is_admin:
-            raise GenericError("Not Admin")
+        test_admin(token)
         filepath = await generate_preferences()
         return FileResponse(filepath)
     except GenericError as exception:
-        logger.error(f"{email} attempted to download responses")
         raise HTTPException(
             status_code=400,
             detail=f"{exception}",
@@ -58,17 +61,26 @@ async def download_responses(
     Admin download form responses
     """
     try:
-        email = decode_jwt(token)["user_email"]
-        is_admin = bool(email == settings.admin)
-        if not is_admin:
-            raise GenericError("Not Admin")
+        test_admin(token)
         filepath = await generate_forms_responses(
             request_responses.domain, request_responses.year
         )
         return FileResponse(filepath)
     except GenericError as exception:
-        logger.error(f"{email} attempted to download responses")
         raise HTTPException(
             status_code=400,
             detail=f"{exception}",
         ) from exception
+
+
+@router.post("/")
+def event_jwt(response: LoginRequestModel):
+    """
+    Admin login for events
+    """
+    if response.roll_number == settings.admin_roll:
+        jwt_res = sign_jwt_auth(roll=response.roll_number)
+        return AdminResponseModel(
+            isAuthorized=True, jwt_token=jwt_res["jwt_token"]
+        )
+    return AdminResponseModel(isAuthorized=False, jwt_token="")

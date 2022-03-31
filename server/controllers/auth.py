@@ -7,6 +7,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from config.logger import logger
 from config.settings import settings
+from server.models.errors import GenericError
 
 jwt_secret = settings.jwt_secret
 jwt_algo = settings.jwt_algo
@@ -28,6 +29,19 @@ def sign_jwt(user_email: str, user_name: str) -> dict[str, str]:
     payload = {
         "user_email": user_email,
         "user_name": user_name,
+    }
+    token = JWT.encode(payload=payload, key=jwt_secret, algorithm=jwt_algo)
+
+    return jwt_response(token)
+
+
+def sign_jwt_auth(roll: str) -> dict[str, str]:
+    """
+    Function to Generate The Token
+    """
+    logger.debug(f"Signing JWT for {roll}")
+    payload = {
+        "roll_number": roll,
     }
     token = JWT.encode(payload=payload, key=jwt_secret, algorithm=jwt_algo)
 
@@ -119,3 +133,25 @@ class JWTBearer(HTTPBearer):
             raise HTTPException(
                 status_code=403, detail="Invalid authorization code."
             ) from exception
+
+
+def test_admin(token: str):
+    """
+    Test if the user is an admin
+    """
+    try:
+        roll_number = decode_jwt(token)["roll_number"]
+        is_admin = bool(roll_number == settings.admin_roll)
+        if not is_admin:
+            raise GenericError("Not Admin")
+    except Exception as error:
+        raise GenericError("Invalid token") from error
+
+
+def check_auth(token: str):
+    """
+    Check if token is valid
+    """
+    if decode_jwt(token)["roll_number"] == settings.admin_roll:
+        return True
+    return False

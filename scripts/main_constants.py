@@ -65,7 +65,7 @@ events = [
     },
     {
         "id": 2,
-        "name": "Latern Designing",
+        "name": "Lantern Designing",
         "description": "Lantern designing",
         "cluster_id": 1,
         "form_link": "http://genericlink.com/route",
@@ -1379,25 +1379,25 @@ points = [
         "point": 5,
         "position": 1,
         "event_id": 1,
-        "department_id": 1,
+        "department_id": None,
     },
     {
         "point": 3,
         "position": 2,
         "event_id": 1,
-        "department_id": 1,
+        "department_id": None,
     },
     {
         "point": 2,
         "position": 3,
         "event_id": 1,
-        "department_id": 2,
+        "department_id": None,
     },
     {
         "point": 5,
         "position": 1,
         "event_id": 2,
-        "department_id": 2,
+        "department_id": None,
     },
     {
         "point": 3,

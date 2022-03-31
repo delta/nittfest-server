@@ -10,7 +10,8 @@ from sqlalchemy.orm import Session
 from config.database import get_database
 from config.logger import logger
 from config.settings import settings
-from server.controllers.auth import get_department_id, sign_jwt
+from server.controllers.auth import check_auth, get_department_id, sign_jwt
+from server.models.admin import AuthResponseModel
 from server.schemas.users import Users
 
 router = APIRouter(
@@ -79,3 +80,13 @@ async def fetch_user_details(
                 "X-Error": "An unexpected error occurred while authentication"
             },
         ) from exception
+
+
+@router.post("/")
+async def check(token: str):
+    """
+    Checks validity of token if in LocalStorage
+    """
+
+    auth_status = check_auth(token)
+    return AuthResponseModel(isAuthorized=auth_status)

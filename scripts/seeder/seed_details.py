@@ -72,17 +72,17 @@ async def seed_maindb(database: Session):
                     )
                 )
                 database.commit()
-        # if database.query(Point).count() == 0:
-        #     for point in points:
-        #         database.add(
-        #             Point(
-        #                 point=point["point"],
-        #                 position=point["position"],
-        #                 event_id=point["event_id"],
-        #                 department_id=point["department_id"],
-        #             )
-        #         )
-        #    database.commit()
+        if database.query(Point).count() == 0:
+            for point in points:
+                database.add(
+                    Point(
+                        point=point["point"],
+                        position=point["position"],
+                        event_id=point["event_id"],
+                        department_id=point["department_id"],
+                    )
+                )
+            database.commit()
         logger.info("Successfully seeded database")
         database.commit()
         database.close()

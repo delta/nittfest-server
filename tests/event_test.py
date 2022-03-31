@@ -2,6 +2,7 @@
 Tests for event route
 """
 from fastapi.testclient import TestClient
+from config.settings import settings
 
 ROUTE = "/events"
 res = [
@@ -94,3 +95,41 @@ def get_events(client: TestClient):
     assert get_response.status_code == 200
     print(get_response.json())
     assert get_response.json() == res
+
+
+def update_events(client: TestClient):
+    """
+    update list of events
+    """
+    jwt_test = settings.event_test_jwt
+    header = {"Authorization": f"Bearer {jwt_test}"}
+    body = [
+        {
+            "cluster": "string",
+            "events": [
+                {
+                    "name": "Handiprint",
+                    "description": "Never gonna give you up",
+                    "rules": "You know the rules and so do I",
+                    "form_link": "http://genericlink.com/route",
+                    "event_link": "http://genericlink.com/route",
+                    "image_link": "http://genericlink.com/route",
+                    "start_time": "2022-03-28T15:55:15.012Z",
+                    "end_time": "2022-03-28T15:55:15.012Z",
+                    "is_reg_completed": True,
+                    "is_event_completed": True,
+                    "points": [
+                        {"point": 5, "position": 1, "department": "EEE"},
+                        {"point": 2, "position": 2, "department": "ICE"},
+                        {"point": 1, "position": 3, "department": "MME"},
+                    ],
+                }
+            ],
+        }
+    ]
+
+    post_response = client.post(url=ROUTE, data=body, headers=header)
+    assert post_response.status_code == 200
+    assert post_response.json() == {
+        "message": "Events Updated Succesfully"
+    }
