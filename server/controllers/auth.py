@@ -91,7 +91,14 @@ def get_department_id(email: str) -> int:
     """
     get the department id of the current User
     """
-    return int(email[1:3])
+    if int(email[0] == 1):
+        return int(email[1:3])
+    if int(email[0] == 2):
+        return 15
+    if int(email[0] == 3 or email[0] == 4):
+        return 16
+
+    return 1
 
 
 class JWTBearer(HTTPBearer):
