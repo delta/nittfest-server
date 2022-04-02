@@ -40,9 +40,11 @@ async def get_scores(
             .all()
         )
 
-        return get_all_scores(
+        scores = get_all_scores(
             departments=departments, clusters=clusters, points=points
         )
+        scores.sort(key=lambda a : a.total_points, reverse=True)
+        return scores
     except GenericError as exception:
         logger.error(f"Fetching Events failed due to {exception}")
         raise HTTPException(

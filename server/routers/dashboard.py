@@ -63,9 +63,9 @@ async def get_dashboard(
 
         return DashboardResponseModel(
             department=department.name,
-            point=get_points(points=points, department=1),
+            point=get_points(points=points, department=department.id),
             upcoming_events=get_upcoming_events(events=events),
-            position=get_position(points=points, department=1),
+            position=get_position(points=points, department=department.id),
         )
 
     except GenericError as exception:

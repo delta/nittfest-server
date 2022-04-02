@@ -49,16 +49,10 @@ def get_position(points: list[tuple], department: int) -> int:
     """
     Util function to get position of the department
     """
-    point_list: dict = {}
-    for point in points:
-        point_list.update({point[0]: point[1]})
-    sorted_list = sorted(point_list.items(), key=lambda item: item[1])
-    sorted_list.reverse()
+    points.sort(key=lambda a: a[1], reverse=True)
     pos = 0
-    current_value = -1
-    for point in sorted_list:
-        if current_value != point[1]:
-            current_value = point[1]
+    for point in points:
+        if point[0] != None:
             pos += 1
         if point[0] == department:
             break
