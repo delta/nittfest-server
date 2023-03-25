@@ -3,6 +3,9 @@ Auth route
 """
 
 import requests
+import http.client
+import urllib.parse
+import json
 from fastapi import APIRouter, HTTPException
 from fastapi.param_functions import Depends
 from sqlalchemy.orm import Session
@@ -26,7 +29,10 @@ async def fetch_user_details(
     """
     Handles the callback route and fetches the user details
     """
-
+    conn = http.client.HTTPSConnection("auth.delta-force.club")
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+	}
     params = {
         "client_id": settings.client_id,
         "client_secret": settings.client_secret,
@@ -35,17 +41,17 @@ async def fetch_user_details(
         "redirect_uri": settings.redirect_url,
     }
     try:
-        token_response = requests.post(
-            url=settings.token_endpoint, data=params
-        ).json()
+        encoded_params = urllib.parse.urlencode(params)
+        conn.request('POST', '/api/oauth/token', body=encoded_params, headers=headers)
+        response = conn.getresponse()
+        token_response = json.loads(response.read().decode('utf-8'))
         logger.debug(token_response)
         headers = {
             "Authorization": "Bearer " + token_response["access_token"]
         }
-        userdetails = requests.post(
-            url=settings.resource_endpoint,
-            headers=headers,
-        ).json()
+        conn.request('POST', '/api/resources/user', body={}, headers=headers)
+        response = conn.getresponse()
+        userdetails = json.loads(response.read().decode('utf-8'))
         if (
             not session.query(Users)
             .filter_by(email=userdetails["email"])

@@ -159,6 +159,6 @@ def check_auth(token: str):
     """
     Check if token is valid
     """
-    if decode_jwt(token)["roll_number"] == settings.admin_roll:
+    if verify_jwt(token):
         return True
     return False

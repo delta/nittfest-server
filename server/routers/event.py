@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from config.database import get_database
 from config.logger import logger
+from server.controllers.auth import JWTBearer, decode_jwt
 
 from server.controllers.event import (
     get_events,
@@ -83,3 +84,27 @@ async def update_event(
             status_code=403,
             detail=f"An unexpected error occurred while updating events:{Exception}",
         ) from Exception
+
+# @router.post(
+# 	"/register",
+# 	dependencies=[Depends(get_database), Depends(JWTBearer())],
+# )
+# async def register_event(
+#     database: Session = Depends(get_database),
+#     token: str = Depends(JWTBearer()),
+# ) -> EventResponseModel:
+#     """
+#     POST route for event registration
+#     """
+#     try:
+#         user_email = decode_jwt(token)["user_email"]
+#         user = database.query(Users).filter_by(email=user_email).first()
+#         event = database.query(Event).filter_by(id=request.event_id).first()
+
+#         return EventResponseModel(message="Events Updated Succesfully")
+#     except GenericError as exception:
+#         logger.error(f"failed due to {exception}")
+#         raise HTTPException(
+#             status_code=403,
+#             detail=f"An unexpected error occurred while updating events:{Exception}",
+#         ) from Exception
