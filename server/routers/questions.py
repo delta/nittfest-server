@@ -48,7 +48,6 @@ async def form_questions(
             .first()
         )
         if not domain:
-
             raise GenericError("INVALID domain requested")
         user = database.query(Users).filter_by(email=email).first()
         questions = (

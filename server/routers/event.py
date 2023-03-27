@@ -15,9 +15,15 @@ from server.controllers.event import (
     update_points,
 )
 from server.models.errors import GenericError
-from server.models.event import ClusterModel, EventResponseModel
+from server.models.event import (
+    ClusterModel,
+    EventResponseModel,
+    EventRegisterRequestModel,
+)
 from server.schemas.cluster import Cluster
 from server.schemas.department import Department
+from server.schemas.users import Users
+from server.schemas.event_registration import EventRegistration
 from server.schemas.event import Event
 from server.schemas.point import Point
 from server.controllers.auth import JWTBearer, test_admin
@@ -85,26 +91,49 @@ async def update_event(
             detail=f"An unexpected error occurred while updating events:{Exception}",
         ) from Exception
 
-# @router.post(
-# 	"/register",
-# 	dependencies=[Depends(get_database), Depends(JWTBearer())],
-# )
-# async def register_event(
-#     database: Session = Depends(get_database),
-#     token: str = Depends(JWTBearer()),
-# ) -> EventResponseModel:
-#     """
-#     POST route for event registration
-#     """
-#     try:
-#         user_email = decode_jwt(token)["user_email"]
-#         user = database.query(Users).filter_by(email=user_email).first()
-#         event = database.query(Event).filter_by(id=request.event_id).first()
 
-#         return EventResponseModel(message="Events Updated Succesfully")
-#     except GenericError as exception:
-#         logger.error(f"failed due to {exception}")
-#         raise HTTPException(
-#             status_code=403,
-#             detail=f"An unexpected error occurred while updating events:{Exception}",
-#         ) from Exception
+@router.post(
+    "/register",
+    dependencies=[Depends(get_database), Depends(JWTBearer())],
+)
+async def register_event(
+    request: EventRegisterRequestModel,
+    session: Session = Depends(get_database),
+    token: str = Depends(JWTBearer()),
+) -> EventResponseModel:
+    """
+    POST route for event updation
+    """
+    try:
+        user_email = decode_jwt(token)["user_email"]
+        user = session.query(Users).filter_by(email=user_email)
+        if not user:
+            raise GenericError("User not found")
+        event = session.query(Event).filter_by(id=request.event_id)
+
+        if not event:
+            raise GenericError("Event not found")
+
+        if (
+            len(
+                session.query(EventRegistration).filter_by(
+                    user_id=user, event_id=event
+                )
+            )
+            > 0
+        ):
+            raise GenericError("Event already registered")
+        else:
+            new_event_registration = EventRegistration(
+                user_id=user, event_id=event
+            )
+            session.add(new_event_registration)
+            session.commit()
+            return EventResponseModel(message="Events Updated Succesfully")
+
+    except GenericError as exception:
+        logger.error(f"failed due to {exception}")
+        raise HTTPException(
+            status_code=403,
+            detail=f"An unexpected error occurred while updating events:{Exception}",
+        ) from Exception

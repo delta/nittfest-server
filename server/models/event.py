@@ -89,3 +89,9 @@ class EventResponseModel(BaseModel):
         title="Update Status",
         description="Response message for Updation status",
     )
+
+
+class EventRegisterRequestModel(BaseModel):
+    """Request model for registering events"""
+
+    event_id: int

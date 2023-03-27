@@ -57,3 +57,9 @@ def get_position(points: list[tuple], department: int) -> int:
         if point[0] == department:
             break
     return pos
+
+
+def get_registered_events(user) -> list[str]:
+    """
+    Util function to get registered events for the user
+    """

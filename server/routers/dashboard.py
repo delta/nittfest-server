@@ -17,7 +17,9 @@ from server.controllers.dashboard import (
 )
 from server.models.dashboard import DashboardResponseModel
 from server.models.errors import GenericError
+from server.models.event import EventModel
 from server.schemas.department import Department
+from server.schemas.event_registration import EventRegistration
 from server.schemas.event import Event
 from server.schemas.point import Point
 from server.schemas.users import Users
@@ -35,7 +37,7 @@ router = APIRouter(
 async def get_dashboard(
     token: str = Depends(JWTBearer()),
     database: Session = Depends(get_database),
-) -> DashboardResponseModel:
+) -> list[EventModel]:
     """
     GET route for Dashboard
     """
@@ -44,29 +46,10 @@ async def get_dashboard(
         user = database.query(Users).filter_by(email=user_email).first()
         if not user:
             raise GenericError("User not found")
-
-        department = (
-            database.query(Department)
-            .filter_by(id=user.department_id)
-            .first()
+        registered_events = database.query(EventRegistration).filter_by(
+            user_id=user
         )
-        if not department:
-            raise GenericError("Department not found for the current user")
-
-        points = (
-            database.query(Point.department_id, func.sum(Point.point))
-            .group_by(Point.department_id)
-            .all()
-        )
-        print(points)
-        events = tuple(database.query(Event).all())
-
-        return DashboardResponseModel(
-            department=department.name,
-            point=get_points(points=points, department=department.id),
-            upcoming_events=get_upcoming_events(events=events),
-            position=get_position(points=points, department=department.id),
-        )
+        return registered_events
 
     except GenericError as exception:
         logger.error(f"<Dashboard retrieval failed due to {exception}>")

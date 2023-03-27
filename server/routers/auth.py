@@ -30,9 +30,7 @@ async def fetch_user_details(
     Handles the callback route and fetches the user details
     """
     conn = http.client.HTTPSConnection("auth.delta-force.club")
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-	}
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
     params = {
         "client_id": settings.client_id,
         "client_secret": settings.client_secret,
@@ -42,16 +40,23 @@ async def fetch_user_details(
     }
     try:
         encoded_params = urllib.parse.urlencode(params)
-        conn.request('POST', '/api/oauth/token', body=encoded_params, headers=headers)
+        conn.request(
+            "POST",
+            "/api/oauth/token",
+            body=encoded_params,
+            headers=headers,
+        )
         response = conn.getresponse()
-        token_response = json.loads(response.read().decode('utf-8'))
+        token_response = json.loads(response.read().decode("utf-8"))
         logger.debug(token_response)
         headers = {
             "Authorization": "Bearer " + token_response["access_token"]
         }
-        conn.request('POST', '/api/resources/user', body={}, headers=headers)
+        conn.request(
+            "POST", "/api/resources/user", body={}, headers=headers
+        )
         response = conn.getresponse()
-        userdetails = json.loads(response.read().decode('utf-8'))
+        userdetails = json.loads(response.read().decode("utf-8"))
         if (
             not session.query(Users)
             .filter_by(email=userdetails["email"])
