@@ -6,6 +6,8 @@ from server.schemas.cluster import Cluster
 from server.schemas.department import Department
 from server.schemas.domains import Domains
 from server.schemas.event import Event
+from server.schemas.informal import Informal
+from server.schemas.guestlectures import GuestLectures
 from server.schemas.point import Point
 from server.schemas.preferences import Preferences
 from server.schemas.questions import Answer, Questions
@@ -23,6 +25,8 @@ models = [
     Answer.metadata,
     Cluster.metadata,
     Event.metadata,
+    Informal.metadata,
+    GuestLectures.metadata,
     Department.metadata,
     Point.metadata,
     Tshirt.metadata,
