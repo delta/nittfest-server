@@ -106,25 +106,25 @@ async def register_event(
     """
     try:
         user_email = decode_jwt(token)["user_email"]
-        user = session.query(Users).filter_by(email=user_email)
+        user = session.query(Users).filter_by(email=user_email).first()
         if not user:
             raise GenericError("User not found")
         cluster = session.query(Cluster).filter_by(name=request.cluster_name)
         if not cluster:
             raise GenericError("Cluster not found")
-        event = session.query(Event).filter_by(name=request.event_name, cluster_id=cluster)
+        event = session.query(Event).filter_by(name=request.event_name, cluster_id=cluster.id)
         if not event:
             raise GenericError("Event not found")
 
         if (
                 session.query(EventRegistration).filter_by(
-                    user_id=user, event_id=event
+                    user_id=user.id, event_id=event.id
                 ).count() > 0
         ):
             raise GenericError("Event already registered")
         else:
             new_event_registration = EventRegistration(
-                user_id=user, event_id=event.id
+                user_id=user.id, event_id=event.id
             )
             session.add(new_event_registration)
             session.commit()

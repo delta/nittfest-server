@@ -29,8 +29,9 @@ async def fetch_user_details(
     """
     Handles the callback route and fetches the user details
     """
-    conn = http.client.HTTPSConnection("auth.delta-force.club")
+    conn = http.client.HTTPSConnection("auth.delta.nitt.edu")
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    print(settings.client_id)
     params = {
         "client_id": settings.client_id,
         "client_secret": settings.client_secret,
@@ -47,6 +48,7 @@ async def fetch_user_details(
             headers=headers,
         )
         response = conn.getresponse()
+        print(response)
         token_response = json.loads(response.read().decode("utf-8"))
         logger.debug(token_response)
         headers = {

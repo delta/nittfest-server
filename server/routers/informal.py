@@ -80,6 +80,9 @@ async def update_informal(
         ) from Exception
 # , Depends(JWTBearer())
 
+@router.post("/register", 
+    dependencies=[Depends(get_database)],
+)
 async def register_informal(
     request: InformalRegisterRequestModel,
     session: Session = Depends(get_database),
@@ -90,7 +93,7 @@ async def register_informal(
     """
     try:
         user_email = decode_jwt(token)["user_email"]
-        user = session.query(Users).filter_by(email=user_email)
+        user = session.query(Users).filter_by(email=user_email).first()
         if not user:
             raise GenericError("User not found")
 
@@ -100,13 +103,13 @@ async def register_informal(
 
         if (
                 session.query(InformalsRegistration).filter_by(
-                    user_id=user, informal_id=informal
+                    user_id=user.id, informal_id=informal.id
                 ).count() > 0
         ):
             raise GenericError("Informal already registered")
         else:
             new_informal_registration = InformalsRegistration(
-                user_id=user, informal_id=informal.id
+                user_id=user.id, informal_id=informal.id
             )
             session.add(new_informal_registration)
             session.commit()

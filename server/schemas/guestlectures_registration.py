@@ -9,7 +9,7 @@ from config.database import Base
 class GuestLecturesRegistration(Base):
     """Event Registration Schema"""
 
-    __tablename__ = "event_registration"
+    __tablename__ = "guestlecture_registration"
     id = Column(Integer, primary_key=True)
     gl_id = Column(Integer, ForeignKey("guestlectures.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)

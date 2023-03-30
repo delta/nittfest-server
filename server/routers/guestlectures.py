@@ -14,7 +14,7 @@ from server.models.guestlectures import (
     GuestLectureResponseModel,
     GuestLectureRegisterRequestModel
 )
-from server.schemas import users
+from server.schemas.users import Users
 from server.schemas.cluster import Cluster
 from server.schemas.department import Department
 from server.schemas.guestlectures import GuestLectures
@@ -87,6 +87,9 @@ async def update_gl(
 
 # , Depends(JWTBearer())
 
+@router.post("/register", 
+             dependencies=[Depends(get_database)],
+)
 async def register_gl(
     request: GuestLectureRegisterRequestModel,
     session: Session = Depends(get_database),
@@ -97,23 +100,23 @@ async def register_gl(
     """
     try:
         user_email = decode_jwt(token)["user_email"]
-        user = session.query(users).filter_by(email=user_email)
+        user = session.query(Users).filter_by(email=user_email).first()
         if not user:
             raise GenericError("User not found")
-
+        print("Devesh ", request.gl_name)
         gl = session.query(GuestLectures).filter_by(name=request.gl_name).first()
         if not gl:
             raise GenericError("GL not found")
 
         if (
                 session.query(GuestLecturesRegistration).filter_by(
-                    user_id=user, gl_id=gl
+                    user_id=user.id, gl_id=gl.id
                 ).count() > 0
         ):
             raise GenericError("GL already registered")
         else:
             new_gl_registration = GuestLecturesRegistration(
-                user_id=user, gl_id=gl.id
+                user_id=user.id, gl_id=gl.id
             )
             session.add(new_gl_registration)
             session.commit()
