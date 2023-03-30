@@ -62,3 +62,9 @@ class GuestLectureResponseModel(BaseModel):
         title="Update Status",
         description="Response message for Updation status",
     )
+
+class GuestLectureRegisterRequestModel(BaseModel):
+    """Request model for registering events"""
+
+    gl_name: str
+    

@@ -62,3 +62,8 @@ class InformalResponseModel(BaseModel):
         title="Update Status",
         description="Response message for Updation status",
     )
+
+class InformalRegisterRequestModel(BaseModel):
+    """Request model for registering events"""
+
+    informal_name: str

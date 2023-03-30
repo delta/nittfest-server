@@ -12,11 +12,14 @@ from server.models.errors import GenericError
 from server.models.guestlectures import (
     ClusterModel,
     GuestLectureResponseModel,
+    GuestLectureRegisterRequestModel
 )
+from server.schemas import users
 from server.schemas.cluster import Cluster
 from server.schemas.department import Department
 from server.schemas.guestlectures import GuestLectures
-from server.controllers.auth import JWTBearer, test_admin
+from server.schemas.guestlectures_registration import GuestLecturesRegistration
+from server.controllers.auth import JWTBearer, decode_jwt, test_admin
 
 router = APIRouter(prefix="/gl")
 
@@ -83,3 +86,42 @@ async def update_gl(
 
 
 # , Depends(JWTBearer())
+
+async def register_gl(
+    request: GuestLectureRegisterRequestModel,
+    session: Session = Depends(get_database),
+    token: str = Depends(JWTBearer()),
+) -> GuestLectureResponseModel:
+    """
+	Register GL
+    """
+    try:
+        user_email = decode_jwt(token)["user_email"]
+        user = session.query(users).filter_by(email=user_email)
+        if not user:
+            raise GenericError("User not found")
+
+        gl = session.query(GuestLectures).filter_by(name=request.gl_name).first()
+        if not gl:
+            raise GenericError("GL not found")
+
+        if (
+                session.query(GuestLecturesRegistration).filter_by(
+                    user_id=user, gl_id=gl
+                ).count() > 0
+        ):
+            raise GenericError("GL already registered")
+        else:
+            new_gl_registration = GuestLecturesRegistration(
+                user_id=user, gl_id=gl.id
+            )
+            session.add(new_gl_registration)
+            session.commit()
+            return GuestLectureResponseModel(message="GL Registered Succesfully")
+
+    except GenericError as exception:
+        logger.error(f"failed due to {exception}")
+        raise HTTPException(
+            status_code=403,
+            detail=f"An unexpected error occurred while registering gl:{Exception}",
+        ) from Exception

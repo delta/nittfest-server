@@ -10,11 +10,13 @@ from server.controllers.informal import (
     update_informals,
 )
 from server.models.errors import GenericError
-from server.models.informal import ClusterModel, InformalResponseModel
+from server.models.informal import ClusterModel, InformalResponseModel, InformalRegisterRequestModel
 from server.schemas.cluster import Cluster
 from server.schemas.department import Department
 from server.schemas.informal import Informal
-from server.controllers.auth import JWTBearer, test_admin
+from server.schemas.informals_registration import InformalsRegistration
+from server.controllers.auth import JWTBearer, decode_jwt, test_admin
+from server.schemas.users import Users
 
 router = APIRouter(prefix="/informals")
 
@@ -77,3 +79,42 @@ async def update_informal(
             detail=f"An unexpected error occurred while updating events:{Exception}",
         ) from Exception
 # , Depends(JWTBearer())
+
+async def register_informal(
+    request: InformalRegisterRequestModel,
+    session: Session = Depends(get_database),
+    token: str = Depends(JWTBearer()),
+) -> InformalResponseModel:
+    """
+	Register Informal
+    """
+    try:
+        user_email = decode_jwt(token)["user_email"]
+        user = session.query(Users).filter_by(email=user_email)
+        if not user:
+            raise GenericError("User not found")
+
+        informal = session.query(Informal).filter_by(name=request.informal_name).first()
+        if not informal:
+            raise GenericError("Informals not found")
+
+        if (
+                session.query(InformalsRegistration).filter_by(
+                    user_id=user, informal_id=informal
+                ).count() > 0
+        ):
+            raise GenericError("Informal already registered")
+        else:
+            new_informal_registration = InformalsRegistration(
+                user_id=user, informal_id=informal.id
+            )
+            session.add(new_informal_registration)
+            session.commit()
+            return InformalResponseModel(message="Informal Registered Succesfully")
+
+    except GenericError as exception:
+        logger.error(f"failed due to {exception}")
+        raise HTTPException(
+            status_code=403,
+            detail=f"An unexpected error occurred while registering Informal:{Exception}",
+        ) from Exception
