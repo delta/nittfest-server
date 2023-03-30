@@ -94,4 +94,5 @@ class EventResponseModel(BaseModel):
 class EventRegisterRequestModel(BaseModel):
     """Request model for registering events"""
 
-    event_id: int
+    event_name: str
+    cluster_name: str

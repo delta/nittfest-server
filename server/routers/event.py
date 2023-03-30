@@ -109,18 +109,17 @@ async def register_event(
         user = session.query(Users).filter_by(email=user_email)
         if not user:
             raise GenericError("User not found")
-        event = session.query(Event).filter_by(id=request.event_id)
-
+        cluster = session.query(Cluster).filter_by(name=request.cluster_name)
+        if not cluster:
+            raise GenericError("Cluster not found")
+        event = session.query(Event).filter_by(name=request.event_name, cluster_id=cluster)
         if not event:
             raise GenericError("Event not found")
 
         if (
-            len(
                 session.query(EventRegistration).filter_by(
                     user_id=user, event_id=event
-                )
-            )
-            > 0
+                ).count() > 0
         ):
             raise GenericError("Event already registered")
         else:
