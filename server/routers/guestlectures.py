@@ -126,5 +126,5 @@ async def register_gl(
         logger.error(f"failed due to {exception}")
         raise HTTPException(
             status_code=403,
-            detail=f"An unexpected error occurred while registering gl:{Exception}",
+            detail=f"An unexpected error occurred while registering gl:{exception}",
         ) from Exception

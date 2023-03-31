@@ -119,5 +119,5 @@ async def register_informal(
         logger.error(f"failed due to {exception}")
         raise HTTPException(
             status_code=403,
-            detail=f"An unexpected error occurred while registering Informal:{Exception}",
+            detail=f"An unexpected error occurred while registering Informal:{exception}",
         ) from Exception

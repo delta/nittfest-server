@@ -109,13 +109,12 @@ async def register_event(
         user = session.query(Users).filter_by(email=user_email).first()
         if not user:
             raise GenericError("User not found")
-        cluster = session.query(Cluster).filter_by(name=request.cluster_name)
+        cluster = session.query(Cluster).filter_by(name=request.cluster_name).first()
         if not cluster:
             raise GenericError("Cluster not found")
-        event = session.query(Event).filter_by(name=request.event_name, cluster_id=cluster.id)
+        event = session.query(Event).filter_by(name=request.event_name, cluster_id=cluster.id).first()
         if not event:
             raise GenericError("Event not found")
-
         if (
                 session.query(EventRegistration).filter_by(
                     user_id=user.id, event_id=event.id
@@ -134,5 +133,5 @@ async def register_event(
         logger.error(f"failed due to {exception}")
         raise HTTPException(
             status_code=403,
-            detail=f"An unexpected error occurred while registering events:{Exception}",
+            detail=f"An unexpected error occurred while registering events:{exception}",
         ) from Exception
