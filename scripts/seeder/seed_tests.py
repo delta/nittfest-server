@@ -70,6 +70,8 @@ def seed_testdb(database: Session):
                         name=event["name"],
                         description=event["description"],
                         rules=event["rules"],
+                        format=event["format"],
+                        resources=event["resources"],
                         cluster_id=event["cluster_id"],
                         image_link=event["image_link"],
                         form_link=event["form_link"],

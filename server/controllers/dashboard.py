@@ -21,6 +21,8 @@ def get_upcoming_events(events: tuple[Event]) -> list[EventModel]:
                     image_link=event.image_link,
                     rules=event.rules,
                     description=event.description,
+                    format=event.format,
+                    resources=event.resources,
                     start_time=event.start_time,
                     end_time=event.end_time,
                     is_reg_completed=event.is_reg_completed,

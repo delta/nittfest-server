@@ -37,6 +37,12 @@ class EventModel(BaseModel):
     description: str = Field(
         ..., title="description", description="description of the event"
     )
+    format: str = Field(
+        ..., title="format", description="format of the event"
+    )
+    resources: str = Field(
+        ..., title="resources", description="Resources of the event"
+    )
     rules: str = Field(
         ..., title="rules", description="Rules of the event"
     )

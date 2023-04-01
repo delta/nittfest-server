@@ -28,6 +28,8 @@ def upgrade():
         sa.Column("description", sa.String(length=3000), nullable=True),
         sa.Column("cluster_id", sa.Integer(), nullable=False),
         sa.Column("rules", sa.String(length=3000), nullable=True),
+        sa.Column("format", sa.String(length=2000), nullable=True),
+        sa.Column("resources", sa.String(length=3000), nullable=True),
         sa.Column("form_link", sa.String(length=255), nullable=True),
         sa.Column("event_link", sa.String(length=255), nullable=True),
         sa.Column("image_link", sa.String(length=255), nullable=True),
