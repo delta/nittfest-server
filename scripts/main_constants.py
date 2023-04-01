@@ -3231,6 +3231,39 @@ guestlectures = [
 
 ]
 
+informals = [
+    {
+        "id": 1,
+        "name": "Silent DJ",
+        "description": "lorem ipsum dolor sit amet consectetur adipiscing elit",
+        "cluster_id": 1,
+        "rules": " lorem ipsum dolor sit amet consectetur adipiscing elit",
+        "form_link": "some generic form link",
+        "informal_link": "some generic informal link",
+        "image_link": "some generic image link",
+        "start_time": "2020-10-10 10:00:00",
+        "end_time": "2020-10-10 11:00:00",
+        "venue": "some generic venue",
+        "is_reg_completed": False,
+        "is_informal_completed": False,
+    },
+    {
+        "id": 2,
+        "name": "Pawga",
+        "description": "lorem ipsum dolor sit amet consectetur adipiscing elit",
+        "cluster_id": 1,
+        "rules": "lorem ipsum dolor sit amet consectetur adipiscing elit",
+        "form_link": "some generic form link",
+        "informal_link": "some generic informal link",
+        "image_link": "some generic image link",
+        "start_time": "2020-10-10 10:00:00",
+        "end_time": "2020-10-10 11:00:00",
+        "venue": "some generic venue",
+        "is_reg_completed": False,
+        "is_informal_completed": False,
+    },
+]
+
 departments = [
     {"id": 1, "name": "AR", "description": "some generic description"},
     {"id": 2, "name": "CL", "description": "some generic description"},

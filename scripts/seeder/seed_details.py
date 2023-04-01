@@ -5,11 +5,12 @@ Seed Main data
 from requests.sessions import Session
 
 from config.logger import logger
-from scripts.main_constants import clusters, events, points, departments
+from scripts.main_constants import clusters, events, points, departments, informals, guestlectures
 from scripts.test_constants import test_departments, test_user
 from server.schemas.cluster import Cluster
 from server.schemas.department import Department
 from server.schemas.event import Event
+from server.schemas.informal import Informal
 from server.schemas.point import Point
 from server.schemas.users import Users
 
@@ -71,6 +72,27 @@ async def seed_maindb(database: Session):
                         end_time=event["end_time"],
                         is_reg_completed=event["is_reg_completed"],
                         is_event_completed=event["is_event_completed"],
+                    )
+                )
+                database.commit()
+
+        if database.query(Informal).count() == 0:
+            for informal in informals:
+                database.add(
+                    Informal(
+                        key=informal["id"],
+                        name=informal["name"],
+                        description=informal["description"],
+                        rules=informal["rules"],
+                        cluster_id=informal["cluster_id"],
+                        image_link=informal["image_link"],
+                        form_link=informal["form_link"],
+                        informal_link=informal["informal_link"],
+                        start_time=informal["start_time"],
+                        end_time=informal["end_time"],
+                        venue=informal["venue"],
+                        is_reg_completed=informal["is_reg_completed"],
+                        is_informal_completed=informal["is_informal_completed"],
                     )
                 )
                 database.commit()
