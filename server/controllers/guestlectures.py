@@ -41,7 +41,7 @@ def get_gls(
                 end_time=gl.end_time,
                 venue=gl.venue,
                 is_reg_completed=gl.is_reg_completed,
-                is_informal_completed=gl.is_informal_completed,
+                is_gl_completed=gl.is_gl_completed,
                 gl_link=gl.gl_link,
             )
         )
@@ -74,7 +74,7 @@ def update_gls(gls: GuestLectureModel, database: Session):
     gl_data.end_time = gls.end_time
     gl_data.venue = gls.venue
     gl_data.is_reg_completed = gls.is_reg_completed
-    gl_data.is_informal_completed = gls.is_informal_completed
+    gl_data.is_gl_completed = gls.is_gl_completed
     database.commit()
 
 

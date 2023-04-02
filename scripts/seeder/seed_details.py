@@ -10,6 +10,7 @@ from scripts.test_constants import test_departments, test_user
 from server.schemas.cluster import Cluster
 from server.schemas.department import Department
 from server.schemas.event import Event
+from server.schemas.guestlectures import GuestLectures
 from server.schemas.informal import Informal
 from server.schemas.point import Point
 from server.schemas.users import Users
@@ -93,6 +94,26 @@ async def seed_maindb(database: Session):
                         venue=informal["venue"],
                         is_reg_completed=informal["is_reg_completed"],
                         is_informal_completed=informal["is_informal_completed"],
+                    )
+                )
+                database.commit()
+        if database.query(GuestLectures).count() == 0:
+            for guestlecture in guestlectures:
+                database.add(
+                    GuestLectures(
+                        key=guestlecture["id"],
+                        name=guestlecture["name"],
+                        description=guestlecture["description"],
+                        rules=guestlecture["rules"],
+                        cluster_id=guestlecture["cluster_id"],
+                        image_link=guestlecture["image_link"],
+                        form_link=guestlecture["form_link"],
+                        gl_link=guestlecture["gl_link"],
+                        start_time=guestlecture["start_time"],
+                        end_time=guestlecture["end_time"],
+                        venue=guestlecture["venue"],
+                        is_reg_completed=guestlecture["is_reg_completed"],
+                        is_gl_completed=guestlecture["is_gl_completed"],
                     )
                 )
                 database.commit()

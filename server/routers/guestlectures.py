@@ -84,9 +84,6 @@ async def update_gl(
             detail=f"An unexpected error occurred while updating events:{Exception}",
         ) from Exception
 
-
-# , Depends(JWTBearer())
-
 @router.post("/register", 
              dependencies=[Depends(get_database)],
 )

@@ -16,7 +16,7 @@ from config.database import Base
 
 
 class GuestLectures(Base):
-    """Informal Schema"""
+    """GuestLecture Schema"""
 
     __tablename__ = "guestlectures"
     id = Column(Integer, primary_key=True)
@@ -31,7 +31,7 @@ class GuestLectures(Base):
     end_time = Column(DateTime)
     venue = Column(String(100))
     is_reg_completed = Column(Boolean, default=False)
-    is_informal_completed = Column(Boolean, default=False)
+    is_gl_completed = Column(Boolean, default=False)
 
     def __init__(
         self,
@@ -47,7 +47,7 @@ class GuestLectures(Base):
         end_time,
         venue,
         is_reg_completed,
-        is_informal_completed,
+        is_gl_completed,
     ):
         self.id = key
         self.name = name
@@ -61,7 +61,7 @@ class GuestLectures(Base):
         self.end_time = end_time
         self.venue = venue
         self.is_reg_completed = is_reg_completed
-        self.is_informal_completed = is_informal_completed
+        self.is_gl_completed = is_gl_completed
 
     def __repr__(self):
         """Representation of the object"""
@@ -77,4 +77,4 @@ class GuestLectures(Base):
         end_time: '{self.end_time}',
         venue: '{self.venue}',
         is_reg_completed: '{self.is_reg_completed}',
-        is_informal_completed '{self.is_informal_completed}',>"""
+        is_gl_completed '{self.is_gl_completed}',>"""

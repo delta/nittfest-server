@@ -3279,7 +3279,7 @@ guestlectures = [
         "end_time": "2020-10-10 11:00:00",
         "venue": "some generic venue",
         "is_reg_completed": False,
-        "is_informal_completed": False,
+        "is_gl_completed": False,
     },
     {
         "id": 2,
@@ -3294,7 +3294,7 @@ guestlectures = [
         "end_time": "2020-10-10 11:00:00",
         "venue": "some generic venue",
         "is_reg_completed": False,
-        "is_informal_completed": False,
+        "is_gl_completed": False,
     },
 ]
 

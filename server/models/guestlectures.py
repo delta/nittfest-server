@@ -42,7 +42,7 @@ class GuestLectureModel(BaseModel):
     is_reg_completed: bool = Field(
         ..., title="is Filled", description="Checks registration deadline"
     )
-    is_informal_completed: bool = Field(
+    is_gl_completed: bool = Field(
         ..., title="is Completed", description="Checks if informal is completed"
     )
 
