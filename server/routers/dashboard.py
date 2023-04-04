@@ -37,7 +37,7 @@ router = APIRouter(
 async def get_dashboard(
     token: str = Depends(JWTBearer()),
     database: Session = Depends(get_database),
-) -> list[EventModel]:
+) -> DashboardResponseModel:
     """
     GET route for Dashboard
     """
@@ -48,8 +48,8 @@ async def get_dashboard(
             raise GenericError("User not found")
         registered_events = database.query(EventRegistration).filter_by(
             user_id=user
-        )
-        return registered_events
+        ).all()
+        return DashboardResponseModel(registered_events, user.email.split("@")[0], user.name)
 
     except GenericError as exception:
         logger.error(f"<Dashboard retrieval failed due to {exception}>")

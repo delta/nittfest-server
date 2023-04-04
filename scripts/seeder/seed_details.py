@@ -5,13 +5,16 @@ Seed Main data
 from requests.sessions import Session
 
 from config.logger import logger
-from scripts.main_constants import clusters, events, points, departments
+from scripts.main_constants import clusters, events, points, departments, informals, guestlectures, leaderboard
 from scripts.test_constants import test_departments, test_user
 from server.schemas.cluster import Cluster
 from server.schemas.department import Department
 from server.schemas.event import Event
+from server.schemas.guestlectures import GuestLectures
+from server.schemas.informal import Informal
 from server.schemas.point import Point
 from server.schemas.users import Users
+from server.schemas.leaderboard import Leaderboard
 
 
 async def seed_maindb(database: Session):
@@ -61,6 +64,8 @@ async def seed_maindb(database: Session):
                         name=event["name"],
                         description=event["description"],
                         rules=event["rules"],
+                        format=event["format"],
+                        resources=event["resources"],
                         cluster_id=event["cluster_id"],
                         image_link=event["image_link"],
                         form_link=event["form_link"],
@@ -72,16 +77,66 @@ async def seed_maindb(database: Session):
                     )
                 )
                 database.commit()
-        if database.query(Point).count() == 0:
-            for point in points:
+
+        if database.query(Informal).count() == 0:
+            for informal in informals:
                 database.add(
-                    Point(
-                        point=point["point"],
-                        position=point["position"],
-                        event_id=point["event_id"],
-                        department_id=point["department_id"],
+                    Informal(
+                        key=informal["id"],
+                        name=informal["name"],
+                        description=informal["description"],
+                        rules=informal["rules"],
+                        cluster_id=informal["cluster_id"],
+                        image_link=informal["image_link"],
+                        form_link=informal["form_link"],
+                        informal_link=informal["informal_link"],
+                        start_time=informal["start_time"],
+                        end_time=informal["end_time"],
+                        venue=informal["venue"],
+                        is_reg_completed=informal["is_reg_completed"],
+                        is_informal_completed=informal["is_informal_completed"],
                     )
                 )
+                database.commit()
+        if database.query(GuestLectures).count() == 0:
+            for guestlecture in guestlectures:
+                database.add(
+                    GuestLectures(
+                        key=guestlecture["id"],
+                        name=guestlecture["name"],
+                        description=guestlecture["description"],
+                        rules=guestlecture["rules"],
+                        cluster_id=guestlecture["cluster_id"],
+                        image_link=guestlecture["image_link"],
+                        form_link=guestlecture["form_link"],
+                        gl_link=guestlecture["gl_link"],
+                        start_time=guestlecture["start_time"],
+                        end_time=guestlecture["end_time"],
+                        venue=guestlecture["venue"],
+                        is_reg_completed=guestlecture["is_reg_completed"],
+                        is_gl_completed=guestlecture["is_gl_completed"],
+                    )
+                )
+                database.commit()
+        # if database.query(Point).count() == 0:
+        #     for point in points:
+        #         database.add(
+        #             Point(
+        #                 point=point["point"],
+        #                 position=point["position"],
+        #                 event_id=point["event_id"],
+        #                 department_id=point["department_id"],
+        #             )
+        #         )
+        #     database.commit()
+        if database.query(Leaderboard).count() == 0:
+            for leader in leaderboard:
+                database.add(
+                    Leaderboard(
+                        point=leader["point"],
+                        department_id=leader["department_id"]
+					)
+				)
             database.commit()
         logger.info("Successfully seeded database")
         database.commit()

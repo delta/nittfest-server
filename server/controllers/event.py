@@ -46,6 +46,8 @@ def get_events(
                 name=event.name,
                 points=points_list.get(event.id, []),
                 rules=event.rules,
+                format=event.format,
+                resources=event.resources,
                 description=event.description,
                 form_link=event.form_link,
                 image_link=event.image_link,
@@ -77,6 +79,8 @@ def update_events(events: EventModel, database: Session):
 
     event_data.description = events.description
     event_data.rules = events.rules
+    event_data.format = events.format
+    event_data.resources = events.resources
     event_data.form_link = events.form_link
     event_data.event_link = events.event_link
     event_data.image_link = events.image_link

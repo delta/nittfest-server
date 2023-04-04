@@ -6,6 +6,7 @@ from functools import lru_cache
 from server.models.scores import ClusterPointModel, ScoreModel
 from server.schemas.cluster import Cluster
 from server.schemas.department import Department
+from server.schemas.leaderboard import Leaderboard
 
 
 @lru_cache()
@@ -59,4 +60,24 @@ def get_all_scores(
             )
         )
 
+    return score_response
+
+
+def get_leaderboard(
+    leaderboard: tuple[Leaderboard], departments: tuple[Department]
+) -> list[ScoreModel]:
+    score_response: list[ScoreModel] = []
+
+    
+    for dept in departments:
+        for leader in leaderboard:
+            if dept.id == leader.department_id:
+                score_response.append(
+                    ScoreModel(
+                        department=dept.name,
+                        total_points=leader.point,
+                        cluster_points=list(),
+                    )
+                )
+    
     return score_response

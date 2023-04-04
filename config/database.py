@@ -24,7 +24,7 @@ TestingSessionLocal = sessionmaker(
 async def get_database():
     """
     Dependency function to get
-    SessionLocal
+    SessionLocal    
     """
     database: Session = SessionLocal()
     try:

@@ -8,40 +8,15 @@ from pydantic import BaseModel
 from pydantic.fields import Field
 
 
-class PointModel(BaseModel):
-    """
-    model for point
-    """
-
-    point: float = Field(
-        ..., title="point", description="score of the event"
-    )
-
-    position: int = Field(
-        ...,
-        title="description",
-        description="current positon in the event",
-    )
-
-    department: str = Field(
-        ...,
-        title="department",
-        description="department in that current position",
-    )
-
-
-class EventModel(BaseModel):
+class InformalModel(BaseModel):
     """Model for events"""
 
     name: str = Field(..., title="name", description="name of the event")
     description: str = Field(
         ..., title="description", description="description of the event"
     )
-    format: str = Field(
-        ..., title="format", description="format of the event"
-    )
-    resources: str = Field(
-        ..., title="resources", description="Resources of the event"
+    cluster_id: int = Field(
+        ..., title="cluster_id", description="cluster_id of the event"
     )
     rules: str = Field(
         ..., title="rules", description="Rules of the event"
@@ -49,7 +24,7 @@ class EventModel(BaseModel):
     form_link: str = Field(
         ..., title="Form Link", description="Link for registering"
     )
-    event_link: str = Field(
+    informal_link: str = Field(
         ..., title="Event Link", description="link of the event"
     )
     image_link: str = Field(
@@ -61,33 +36,25 @@ class EventModel(BaseModel):
     end_time: datetime = Field(
         ..., title="End Time", description="End Time of the event"
     )
+    venue: str = Field(
+        ..., title="Venue", description="Venue of the event"
+    )
     is_reg_completed: bool = Field(
         ..., title="is Filled", description="Checks registration deadline"
     )
-    is_event_completed: bool = Field(
-        ..., title="is Completed", description="Checks if event completed"
+    is_informal_completed: bool = Field(
+        ..., title="is Completed", description="Checks if informal is completed"
     )
-    points: list[PointModel] = Field(
-        ..., title="points", description="array of points"
-    )
-
 
 class ClusterModel(BaseModel):
     """Model for cluster"""
-
-    cluster: str = Field(
+    informals: list[InformalModel] = Field(
         ...,
-        title="cluster",
-        description="Name of the cluster the vent belongs to",
-    )
-    events: list[EventModel] = Field(
-        ...,
-        title="events",
-        description="List of events under this cluster",
+        title="informal",
+        description="List of informals under this cluster",
     )
 
-
-class EventResponseModel(BaseModel):
+class InformalResponseModel(BaseModel):
     """Response model for Updating Events"""
 
     message: str = Field(
@@ -96,9 +63,7 @@ class EventResponseModel(BaseModel):
         description="Response message for Updation status",
     )
 
-
-class EventRegisterRequestModel(BaseModel):
+class InformalRegisterRequestModel(BaseModel):
     """Request model for registering events"""
 
-    event_name: str
-    cluster_name: str
+    informal_name: str
