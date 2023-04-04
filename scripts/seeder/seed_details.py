@@ -5,7 +5,7 @@ Seed Main data
 from requests.sessions import Session
 
 from config.logger import logger
-from scripts.main_constants import clusters, events, points, departments, informals, guestlectures
+from scripts.main_constants import clusters, events, points, departments, informals, guestlectures, leaderboard
 from scripts.test_constants import test_departments, test_user
 from server.schemas.cluster import Cluster
 from server.schemas.department import Department
@@ -14,6 +14,7 @@ from server.schemas.guestlectures import GuestLectures
 from server.schemas.informal import Informal
 from server.schemas.point import Point
 from server.schemas.users import Users
+from server.schemas.leaderboard import Leaderboard
 
 
 async def seed_maindb(database: Session):
@@ -117,16 +118,25 @@ async def seed_maindb(database: Session):
                     )
                 )
                 database.commit()
-        if database.query(Point).count() == 0:
-            for point in points:
+        # if database.query(Point).count() == 0:
+        #     for point in points:
+        #         database.add(
+        #             Point(
+        #                 point=point["point"],
+        #                 position=point["position"],
+        #                 event_id=point["event_id"],
+        #                 department_id=point["department_id"],
+        #             )
+        #         )
+        #     database.commit()
+        if database.query(Leaderboard).count() == 0:
+            for leader in leaderboard:
                 database.add(
-                    Point(
-                        point=point["point"],
-                        position=point["position"],
-                        event_id=point["event_id"],
-                        department_id=point["department_id"],
-                    )
-                )
+                    Leaderboard(
+                        point=leader["point"],
+                        department_id=leader["department_id"]
+					)
+				)
             database.commit()
         logger.info("Successfully seeded database")
         database.commit()

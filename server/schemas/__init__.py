@@ -13,6 +13,7 @@ from server.schemas.preferences import Preferences
 from server.schemas.questions import Answer, Questions
 from server.schemas.tshirt import Tshirt
 from server.schemas.users import Users
+from server.schemas.leaderboard import Leaderboard
 
 schemas = [
     Users.metadata,
@@ -28,6 +29,7 @@ models = [
     Informal.metadata,
     GuestLectures.metadata,
     Department.metadata,
-    Point.metadata,
+    # Point.metadata,
     Tshirt.metadata,
+    Leaderboard.metadata
 ]

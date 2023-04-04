@@ -41,3 +41,8 @@ class ScoreModel(BaseModel):
         title="Cluster Points",
         description="Points for each cluster",
     )
+
+# class PointsUpdateModel(BaseModel):
+#     """
+#     Model for all
+#     """
