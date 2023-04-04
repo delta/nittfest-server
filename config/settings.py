@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     test_db: str = os.getenv("TEST_DATABASE")
     test_jwt: str = os.getenv("TEST_JWT")
     event_test_jwt: str = os.getenv("EVENT_TEST_JWT")
+    admin_password: str = os.getenv("ADMIN_PASSWORD")
+    admin_username: str = os.getenv("ADMIN_USERNAME")
+    admin_secret: str = os.getenv("ADMIN_SECRET")
 
     sqlalchemy_database_url: str = (
         f"mysql+pymysql://{mysql_user}:"
